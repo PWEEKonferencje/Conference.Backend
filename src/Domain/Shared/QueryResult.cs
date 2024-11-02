@@ -1,20 +1,29 @@
 namespace Domain.Shared;
 
-public class QueryResult<T>
+public static class QueryResult
 {
-	public ErrorResult? ErrorResultOptional { get; private set; }
-
-	public T Result { get; private set; } = default!;
+	public static IQueryResult<T> Success<T>(T result) 
+		=> new QueryResult<T>
+		{
+			Result = result,
+			ErrorResultOptional = null
+		};
 	
-	public bool IsSuccess => ErrorResultOptional == null;
-	
-	public static QueryResult<T> Success(T result) => new QueryResult<T>
+	public static IQueryResult<T> Failure<T>(ErrorResult errorResult) 
+		=> new QueryResult<T>
 	{
-		Result = result
-	};
-	
-	public static QueryResult<T> Failure(ErrorResult errorResult) => new QueryResult<T>
-	{
+		Result = default!,
 		ErrorResultOptional = errorResult
 	};
+}
+
+public interface IQueryResult<T> : IResult<T>;
+
+public class QueryResult<T> : IQueryResult<T>
+{
+	public ErrorResult? ErrorResultOptional { get; init; }
+
+	public T Result { get; init; } = default!;
+	
+	public bool IsSuccess => ErrorResultOptional == null;
 }

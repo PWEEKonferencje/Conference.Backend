@@ -1,22 +1,29 @@
 namespace Domain.Shared;
 
-public class CommandResult<T>
+public static class CommandResult
 {
-	public ErrorResult? ErrorResultOptional { get; set; }
-
-	public T Result { get; set; } = default!;
+	public static ICommandResult<T> Success<T>(T result) 
+		=> new CommandResult<T>
+		{
+			Result = result,
+			ErrorResultOptional = null
+		};
 	
-	public bool IsSuccess => ErrorResultOptional == null;
-	
-	public static CommandResult<T> Success(T result) => new CommandResult<T>
-	{
-		Result = result,
-		ErrorResultOptional = null
-	};
-	
-	public static CommandResult<T> Failure(ErrorResult errorResult) => new CommandResult<T>
+	public static ICommandResult<T> Failure<T>(ErrorResult errorResult) 
+		=> new CommandResult<T>
 	{
 		Result = default!,
 		ErrorResultOptional = errorResult
 	};
+}
+
+public interface ICommandResult<T> : IResult<T>;
+
+public class CommandResult<T> : ICommandResult<T>
+{
+	public ErrorResult? ErrorResultOptional { get; init; }
+
+	public T Result { get; init; } = default!;
+	
+	public bool IsSuccess => ErrorResultOptional == null;
 }
