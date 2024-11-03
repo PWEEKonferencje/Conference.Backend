@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Domain.Shared;
 using Microsoft.AspNetCore.Diagnostics;
 
 namespace WebApi;
@@ -10,16 +11,7 @@ public class GlobalExceptionHandler : IExceptionHandler
 		httpContext.Response.ContentType = "application/json";
 		httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-		var response = new
-		{
-			error = new
-			{
-				message = exception.Message,
-				stackTrace = exception.StackTrace
-			}
-		};
-
-		var result = JsonSerializer.Serialize(response);
+		var result = JsonSerializer.Serialize(ErrorResult.GenericError);
 
 		await httpContext.Response.WriteAsync(result);
 
