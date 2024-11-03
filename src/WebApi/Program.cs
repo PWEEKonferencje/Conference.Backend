@@ -5,12 +5,12 @@ using Application;
 using Domain;
 using Domain.Entities.Identity;
 using Infrastructure;
-using Infrastructure.Authentication;
 using Infrastructure.Database;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using Serilog.Events;
 using WebApi;
+using WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,9 +40,26 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+Log.Logger = new LoggerConfiguration()
+	.WriteTo.Debug(restrictedToMinimumLevel: LogEventLevel.Debug)
+	.WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Information)
+	.Enrich.FromLogContext()
+	.CreateLogger();
+builder.Host.UseSerilog();
+
 var app = builder.Build();
 
+app.Lifetime.ApplicationStarted.Register(() =>
+{
+	var serverAddresses = app.Urls;
+	foreach (var i in serverAddresses)
+	{
+		Log.Information("Swagger running at {Url}/swagger/index.html", i);
+	}	
+});
+
 app.UseExceptionHandler(_ => {});
+app.UseMiddleware<LoggingMiddleware>();
 
 app.UseSwagger();
 app.UseSwaggerUI();
