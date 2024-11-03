@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Application.Authentication.Commands;
 using Domain.Entities.Identity;
 using Domain.Models.Authentication;
@@ -17,7 +18,7 @@ public class AuthController(UserManager<UserAccount> userManager, SignInManager<
 	: ControllerBase
 {
 	[HttpGet("oauth")]
-	public async Task<IActionResult> ExternalLogin([FromQuery] string provider, [FromQuery] string? returnUrl = "/")
+	public async Task<IActionResult> ExternalLogin([FromQuery, Required] string provider, [FromQuery] string? returnUrl = "/")
 	{
 		var redirectUrl = Url.Action(nameof(OAuthLoginCallback), "Auth", new { returnUrl });
 		var result = await mediator.Send(new OAuthLoginCommand(provider, redirectUrl!));
