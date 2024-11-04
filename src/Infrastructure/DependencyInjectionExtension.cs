@@ -1,6 +1,7 @@
 using System.Text;
 using Infrastructure.Authentication;
 using Infrastructure.Database;
+using Infrastructure.Dictionaries.UniversityNames;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -68,6 +69,7 @@ public static class DependencyInjectionExtension
 	        });
         #endregion
         
+        services.AddSingleton<IUniversityNameRepository>(_ => new UniversityNameRepository());
 		return services;
 	}
 }
