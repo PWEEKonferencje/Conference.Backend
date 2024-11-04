@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Diagnostics;
 
 namespace WebApi;
 
-public class GlobalExceptionHandler : IExceptionHandler
+public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
 {
 	public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
 	{
@@ -13,7 +13,9 @@ public class GlobalExceptionHandler : IExceptionHandler
 
 		var result = JsonSerializer.Serialize(ErrorResult.GenericError);
 
-		await httpContext.Response.WriteAsync(result);
+		await httpContext.Response.WriteAsync(result, cancellationToken: cancellationToken);
+		
+		logger.LogWarning("Request returned 500. An error occurred: {Error}", exception.Message);
 
 		return true;
 	}
