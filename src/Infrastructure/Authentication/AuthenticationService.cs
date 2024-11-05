@@ -5,7 +5,6 @@ using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
 namespace Infrastructure.Authentication;
 
@@ -52,7 +51,6 @@ public class AuthenticationService(SignInManager<UserAccount> signInManager, Use
 		var roles = await userManager.GetRolesAsync(user);
 		var claims = new List<Claim>
 		{
-			new(JwtRegisteredClaimNames.Sub, user.UserName!),
 			new(ClaimTypes.NameIdentifier, user.Id),
 			new(ClaimTypes.Name, user.UserName!)
 		};

@@ -9,4 +9,5 @@ public class ConferenceDbContext(DbContextOptions<ConferenceDbContext> options)
 	: IdentityDbContext<UserAccount>(options)
 {
 	public DbSet<UserProfile> UserProfiles { get; set; } = default!;
+	public DbSet<UserAccount> UserAccounts { get; set; } = default!;
 }

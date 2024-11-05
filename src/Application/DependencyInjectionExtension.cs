@@ -1,3 +1,4 @@
+using Application.Profiles.MapperProfiles;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +14,7 @@ public static class DependencyInjectionExtension
 		// Add application services here
 		services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(DependencyInjectionExtension).Assembly));
 		services.AddValidatorsFromAssembly(typeof(DependencyInjectionExtension).Assembly);
+		services.AddAutoMapper(typeof(UserProfileProfile));
 		return services;
 	}
 }

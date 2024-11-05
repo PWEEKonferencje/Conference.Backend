@@ -1,5 +1,4 @@
 using System.Reflection;
-using System.Text;
 using System.Text.Json.Serialization;
 using Application;
 using Domain;
@@ -7,6 +6,7 @@ using Domain.Entities.Identity;
 using Infrastructure;
 using Infrastructure.Database;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 using WebApi;
@@ -27,9 +27,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.Get
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 builder.Services.AddIdentity<UserAccount, IdentityRole>()
-	.AddEntityFrameworkStores<ConferenceDbContext>()
-	.AddDefaultTokenProviders();
-
+	.AddEntityFrameworkStores<ConferenceDbContext>();
 builder.Services.AddControllers()
 	.AddJsonOptions(options =>
 	{
@@ -38,7 +36,33 @@ builder.Services.AddControllers()
 		options.JsonSerializerOptions.AllowTrailingCommas = true;
 	});
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(option =>
+{
+	option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+	{
+		In = ParameterLocation.Header,
+		Description = "Please enter a valid token",
+		Name = "Authorization",
+		Type = SecuritySchemeType.Http,
+		BearerFormat = "JWT",
+		Scheme = "Bearer"
+	});
+	option.AddSecurityRequirement(new OpenApiSecurityRequirement
+	{
+		{
+			new OpenApiSecurityScheme
+			{
+				Reference = new OpenApiReference
+				{
+					Type = ReferenceType.SecurityScheme,
+					Id = "Bearer"
+				}
+			},
+			new List<string>()
+		}
+	});
+});
+
 
 Log.Logger = new LoggerConfiguration()
 	.WriteTo.Debug(restrictedToMinimumLevel: LogEventLevel.Debug)
@@ -65,6 +89,8 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
 
 app.UseAuthorization();
 

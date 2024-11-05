@@ -1,4 +1,5 @@
 using System.Text;
+using Domain.Repositories;
 using Infrastructure.Authentication;
 using Infrastructure.Database;
 using Infrastructure.Dictionaries.UniversityNames;
@@ -67,9 +68,12 @@ public static class DependencyInjectionExtension
 		        githubOptions.TokenEndpoint = "https://github.com/login/oauth/access_token";
 		        githubOptions.UserInformationEndpoint = "https://api.github.com/user";
 	        });
+        services.AddScoped<IUserContextService, UserContextService>();
+        services.AddHttpContextAccessor();
         #endregion
         
         services.AddSingleton<IUniversityNameRepository>(_ => new UniversityNameRepository());
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 		return services;
 	}
 }
