@@ -20,7 +20,6 @@ internal class CreateProfileCommandHandler (UserManager<UserAccount> userManager
 {
     public async Task<ICommandResult<CreateProfileResponse>> Handle(CreateProfileCommand request, CancellationToken cancellationToken)
     {
-        
         var userAccount = await userManager.GetUserAsync(userContextService.User ?? throw new UnauthorizedAccessException());
         if (userAccount is null)
         {
