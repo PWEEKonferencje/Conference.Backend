@@ -17,9 +17,9 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
     volumes:
-      - ./WebApi:/app/WebApi                     # Montowanie katalogu WebApi
-      - ./Application:/app/Application            # Montowanie katalogu Application
-      - ./Infrastructure:/app/Infrastructure                    # Montowanie katalogu WebApi do /app/WebApi w kontenerze
+      - ./WebApi:/app/WebApi                    
+      - ./Application:/app/Application           
+      - ./Infrastructure:/app/Infrastructure                   
       - ./Domain:/app/Domain
     working_dir: /app/WebApi
     command: >

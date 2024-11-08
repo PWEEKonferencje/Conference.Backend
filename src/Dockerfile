@@ -1,6 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /src
-# Skopiuj pliki .csproj i przywróć zależności
 COPY WebApi/WebApi.csproj WebApi/
 COPY Application/Application.csproj Application/
 COPY Domain/Domain.csproj Domain/
@@ -10,7 +9,6 @@ RUN dotnet restore Application/Application.csproj
 RUN dotnet restore Domain/Domain.csproj
 RUN dotnet restore Infrastructure/Infrastructure.csproj
 
-# Skopiuj resztę plików i zbuduj aplikację
 COPY . ./
 RUN dotnet publish WebApi/WebApi.csproj -c Release -o out
 
@@ -28,5 +26,4 @@ COPY --from=build-env /src/Infrastructure/bin/Release/net8.0/Infrastructure.dll 
 
 EXPOSE 5000
 
-# Ustaw punkt wejścia dla kontenera
 ENTRYPOINT ["dotnet", "WebApi.dll"]
