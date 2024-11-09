@@ -25,7 +25,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddDomain();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddAuthorization();
+
 builder.Services.AddIdentity<UserAccount, IdentityRole>()
 	.AddEntityFrameworkStores<ConferenceDbContext>();
 builder.Services.AddControllers()
@@ -92,7 +92,6 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
-app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
