@@ -16,6 +16,7 @@ services:
       - postgres
     environment:
       ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=postgres;Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Database=${POSTGRES_DB};"
     volumes:
       - ./WebApi:/app/WebApi                    
       - ./Application:/app/Application           
