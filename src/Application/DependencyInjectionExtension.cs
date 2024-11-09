@@ -1,3 +1,4 @@
+using Application.Common;
 using Application.Profiles.MapperProfiles;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +13,12 @@ public static class DependencyInjectionExtension
 	public static IServiceCollection AddApplication(this IServiceCollection services)
 	{
 		// Add application services here
-		services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(DependencyInjectionExtension).Assembly));
+		services.AddMediatR(cfg =>
+		{
+			cfg.RegisterServicesFromAssembly(typeof(DependencyInjectionExtension).Assembly);
+			cfg.AddOpenBehavior(typeof(ValidationBehaviour<,>));
+		});
+			
 		services.AddValidatorsFromAssembly(typeof(DependencyInjectionExtension).Assembly);
 		services.AddAutoMapper(typeof(UserProfileProfile));
 		return services;

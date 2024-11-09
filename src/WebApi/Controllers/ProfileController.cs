@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using WebApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Domain.Models.Profile;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace WebApi.Controllers;
 
@@ -17,7 +16,4 @@ public class ProfileController (IMediator mediator): ControllerBase
     {
         return (await mediator.Send(new CreateProfileCommand(profileRequest))).ToActionResult(201);
     }
-
-    [AllowAnonymous]
-    [HttpGet] public string GetText() => "Sranie i jebanie";
 }
