@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using WebApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Domain.Models.Profile;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace WebApi.Controllers;
 

@@ -1,9 +1,9 @@
-using System.ComponentModel.DataAnnotations;
 using Application.Authentication.Commands;
 using Domain.Entities.Identity;
 using Domain.Models.Authentication;
 using Domain.Shared;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Extensions;
@@ -11,14 +11,15 @@ using WebApi.Extensions;
 namespace WebApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
+[AllowAnonymous]
 [ProducesResponseType(typeof(ErrorResult), 400)]
 [ProducesResponseType(typeof(ErrorResult), 500)]
 public class AuthController(UserManager<UserAccount> userManager, SignInManager<UserAccount> signInManager, IMediator mediator) 
 	: ControllerBase
 {
 	[HttpGet("oauth")]
-	public async Task<IActionResult> ExternalLogin([FromQuery, Required] string provider, [FromQuery] string? returnUrl = "/")
+	public async Task<IActionResult> ExternalLogin([FromQuery] string provider, [FromQuery] string? returnUrl = "/")
 	{
 		var redirectUrl = Url.Action(nameof(OAuthLoginCallback), "Auth", new { returnUrl });
 		var result = await mediator.Send(new OAuthLoginCommand(provider, redirectUrl!));
