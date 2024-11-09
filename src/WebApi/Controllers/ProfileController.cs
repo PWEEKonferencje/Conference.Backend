@@ -16,7 +16,4 @@ public class ProfileController (IMediator mediator): ControllerBase
     {
         return (await mediator.Send(new CreateProfileCommand(profileRequest))).ToActionResult(201);
     }
-
-    [AllowAnonymous]
-    [HttpGet] public string GetText() => "Sranie i jebanie";
 }

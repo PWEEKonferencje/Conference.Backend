@@ -13,8 +13,6 @@ namespace WebApi.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [AllowAnonymous]
-[ProducesResponseType(typeof(ErrorResult), 400)]
-[ProducesResponseType(typeof(ErrorResult), 500)]
 public class AuthController(UserManager<UserAccount> userManager, SignInManager<UserAccount> signInManager, IMediator mediator) 
 	: ControllerBase
 {

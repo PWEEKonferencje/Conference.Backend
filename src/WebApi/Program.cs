@@ -3,11 +3,13 @@ using System.Text.Json.Serialization;
 using Application;
 using Domain;
 using Domain.Entities.Identity;
+using Domain.Shared;
 using Infrastructure;
 using Infrastructure.Database;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -35,6 +37,8 @@ builder.Services.AddControllers(options =>
 	{
 		options.Filters.Add(new AuthorizeFilter( new AuthorizationPolicyBuilder()
 			.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build()));
+		options.Filters.Add(new ProducesResponseTypeAttribute(typeof(ErrorResult), 500));
+		options.Filters.Add(new ProducesResponseTypeAttribute(typeof(ErrorResult), 400));
 		options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
 	})
 	.AddJsonOptions(options =>

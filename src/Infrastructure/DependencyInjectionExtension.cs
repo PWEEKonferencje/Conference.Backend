@@ -41,11 +41,11 @@ public static class DependencyInjectionExtension
 			        ValidateAudience = true,
 			        ValidateLifetime = true,
 			        ValidateIssuerSigningKey = true,
-			        ValidIssuer = 
-				        authenticationConfiguration.JwtIssuer ?? 
+			        ValidIssuer =
+				        authenticationConfiguration.JwtIssuer ??
 				        throw new KeyNotFoundException("JWT Issuer environmental variable is missing"),
-			        ValidAudience = 
-				        authenticationConfiguration.JwtAudience ?? 
+			        ValidAudience =
+				        authenticationConfiguration.JwtAudience ??
 				        throw new KeyNotFoundException("JWT Audience environmental variable is missing"),
 			        IssuerSigningKey =
 				        new SymmetricSecurityKey(
@@ -56,10 +56,10 @@ public static class DependencyInjectionExtension
 	        })
 	        .AddGitHub(githubOptions =>
 	        {
-		        githubOptions.ClientId 
+		        githubOptions.ClientId
 			        = configuration["OAuth2:GitHub:ClientId"] ??
 			          throw new KeyNotFoundException("GitHub ClientId environmental variable is missing");
-		        githubOptions.ClientSecret 
+		        githubOptions.ClientSecret
 			        = configuration["OAuth2:GitHub:ClientSecret"] ??
 			          throw new KeyNotFoundException("GitHub ClientSecret environmental variable is missing");
 		        githubOptions.Scope.Add("user:email");
