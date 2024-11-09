@@ -13,9 +13,11 @@ namespace WebApi.Controllers;
 public class ProfileController (IMediator mediator): ControllerBase
 {
     [HttpPost]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> CreateProfile([FromBody] CreateProfileRequest profileRequest)
     {
         return (await mediator.Send(new CreateProfileCommand(profileRequest))).ToActionResult(201);
     }
+
+    [AllowAnonymous]
+    [HttpGet] public string GetText() => "Sranie i jebanie";
 }

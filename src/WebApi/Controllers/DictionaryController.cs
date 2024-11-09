@@ -11,7 +11,6 @@ namespace WebApi.Controllers;
 [Route("api/[controller]")]
 public class DictionaryController(IMediator mediator) : ControllerBase
 {
-	[Authorize]
 	[HttpGet("university-names")]
 	public async Task<IActionResult> GetUniversityNames([FromQuery, Required] string search, [FromQuery] int count = 10)
 		=> (await mediator.Send(new GetUniversityNamesQuery(search, count)))

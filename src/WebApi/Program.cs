@@ -5,7 +5,10 @@ using Domain;
 using Domain.Entities.Identity;
 using Infrastructure;
 using Infrastructure.Database;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
@@ -28,7 +31,11 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 builder.Services.AddIdentity<UserAccount, IdentityRole>()
 	.AddEntityFrameworkStores<ConferenceDbContext>();
-builder.Services.AddControllers()
+builder.Services.AddControllers(options =>
+	{
+		options.Filters.Add(new AuthorizeFilter( new AuthorizationPolicyBuilder()
+			.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build()));
+	})
 	.AddJsonOptions(options =>
 	{
 		options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
