@@ -17,7 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2B4B0B99-39E
 	ProjectSection(SolutionItems) = preProject
 		src\Dockerfile = src\Dockerfile
 		src\docker-compose.yml = src\docker-compose.yml
-		src\.env = src\.env
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{8556600B-D2C9-4066-A75C-D6AEFE13DEDC}"

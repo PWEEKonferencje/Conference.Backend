@@ -1,5 +1,3 @@
-using Microsoft.IdentityModel.Tokens;
-
 namespace Infrastructure.Authentication;
 
 public class AuthenticationConfiguration

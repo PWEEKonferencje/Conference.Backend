@@ -35,6 +35,7 @@ builder.Services.AddControllers(options =>
 	{
 		options.Filters.Add(new AuthorizeFilter( new AuthorizationPolicyBuilder()
 			.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build()));
+		options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
 	})
 	.AddJsonOptions(options =>
 	{
