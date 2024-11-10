@@ -29,6 +29,5 @@ public class AuthController(UserManager<UserAccount> userManager, SignInManager<
 	public async Task<IActionResult> OAuthLoginCallback(string? returnUrl = null, string? remoteError = null)
 	{
 		return (await mediator.Send(new OAuthLoginCallbackCommand(returnUrl, remoteError))).ToActionResult();
-
 	}
 }

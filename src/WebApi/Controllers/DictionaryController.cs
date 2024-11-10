@@ -1,4 +1,5 @@
 using Application.Dictionaries.Queries;
+using Infrastructure.Dictionaries.UniversityNames;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ namespace WebApi.Controllers;
 public class DictionaryController(IMediator mediator) : ControllerBase
 {
 	[HttpGet("university-names")]
+	[ProducesResponseType(typeof(IReadOnlyList<UniversityNameModel>), 200)]
 	public async Task<IActionResult> GetUniversityNames([FromQuery] string search, [FromQuery] int count = 10)
 	{
 		return (await mediator.Send(new GetUniversityNamesQuery(search, count)))

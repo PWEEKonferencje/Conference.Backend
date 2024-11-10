@@ -12,6 +12,7 @@ namespace WebApi.Controllers;
 public class ProfileController (IMediator mediator): ControllerBase
 {
     [HttpPost]
+    [ProducesResponseType(typeof(CreateProfileResponse), 201)]
     public async Task<IActionResult> CreateProfile([FromBody] CreateProfileRequest profileRequest)
     {
         return (await mediator.Send(new CreateProfileCommand(profileRequest))).ToActionResult(201);
