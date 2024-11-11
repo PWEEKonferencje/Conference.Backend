@@ -17,7 +17,12 @@ public static class CommandResult
 	};
 }
 
-public interface ICommandResult<T> : IResult<T>;
+public interface ICommandResult<T>
+{
+	public ErrorResult? ErrorResultOptional { get; init; }
+	public T Result { get; init; }
+	public bool IsSuccess { get; }
+}
 
 public class CommandResult<T> : ICommandResult<T>
 {

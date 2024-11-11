@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace Infrastructure.Authentication;
 
 public class AuthenticationService(SignInManager<UserAccount> signInManager, UserManager<UserAccount> userManager, 
-	AuthenticationConfiguration authenticationConfiguration) 
+	AuthenticationConfiguration authenticationConfiguration, IUserContextService userContextService) 
 	: IAuthenticationService
 {
 	public Task<AuthenticationProperties> ConfigureExternalLoginProperties(string provider, string redirectUrl)
@@ -44,6 +44,14 @@ public class AuthenticationService(SignInManager<UserAccount> signInManager, Use
 		if (!result.Succeeded) return null;
 		result = await userManager.AddLoginAsync(user, info);
 		return result.Succeeded ? user : null;
+	}
+
+	public async Task<UserAccount?> GetCurrentUserAccount()
+	{
+		var user = userContextService.User;
+		if (user is null)
+			return null;
+		return await userManager.GetUserAsync(userContextService.User!);
 	}
 
 	public async Task<string> GenerateJwtToken(UserAccount user)

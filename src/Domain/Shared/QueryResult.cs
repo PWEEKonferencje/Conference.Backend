@@ -17,7 +17,12 @@ public static class QueryResult
 	};
 }
 
-public interface IQueryResult<T> : IResult<T>;
+public interface IQueryResult<T>
+{
+	public ErrorResult? ErrorResultOptional { get; init; }
+	public T Result { get; init; }
+	public bool IsSuccess { get; }
+}
 
 public class QueryResult<T> : IQueryResult<T>
 {

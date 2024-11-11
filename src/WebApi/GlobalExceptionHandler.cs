@@ -8,7 +8,7 @@ namespace WebApi;
 
 public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
 {
-	public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
+	public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception,  CancellationToken cancellationToken)
 	{
 		httpContext.Response.Clear();
 		httpContext.Response.ContentType = "application/json";
@@ -18,7 +18,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
 			httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
 			errorResult = new ErrorResult
 			{
-				ErrorCode = ValidationError.AuthorizationFailed,
+				ErrorCode = "ValidationError",
 				Errors =
 					validationException
 						.Errors

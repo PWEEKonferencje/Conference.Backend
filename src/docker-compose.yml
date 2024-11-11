@@ -10,22 +10,5 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  migration:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
-    depends_on:
-      - postgres
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: "Server=postgres;Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Database=${POSTGRES_DB};"
-    volumes:
-      - ./WebApi:/app/WebApi                    
-      - ./Application:/app/Application           
-      - ./Infrastructure:/app/Infrastructure                   
-      - ./Domain:/app/Domain
-    working_dir: /app/WebApi
-    command: >
-      sh -c "dotnet tool install --global dotnet-ef &&
-             /root/.dotnet/tools/dotnet-ef database update"
-
 volumes:
   postgres_data:
