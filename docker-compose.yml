@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_USER: dev
       POSTGRES_PASSWORD: DevPassword123
-      POSTGRES_DB: Conference
+      POSTGRES_DB: ConferenceDb
     ports:
       - "5432:5432"
     volumes:
@@ -16,16 +16,17 @@ services:
       - postgres
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: "Server=postgres;Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Database=${POSTGRES_DB};"
+      ConnectionStrings__DefaultConnection: "Server=postgres;Username=dev;Password=DevPassword123;Database=ConferenceDb;"
     volumes:
-      - ./WebApi:/app/WebApi                    
-      - ./Application:/app/Application           
-      - ./Infrastructure:/app/Infrastructure                   
-      - ./Domain:/app/Domain
+      - ./src/WebApi:/app/WebApi
+      - ./src/Application:/app/Application
+      - ./src/Infrastructure:/app/Infrastructure
+      - ./src/Domain:/app/Domain
     working_dir: /app/WebApi
     command: >
       sh -c "dotnet tool install --global dotnet-ef &&
-             /root/.dotnet/tools/dotnet-ef database update"
+             sleep 10 &&
+             /root/.dotnet/tools/dotnet-ef database update --project /app/Infrastructure --startup-project /app/WebApi"
 
 volumes:
   postgres_data:
