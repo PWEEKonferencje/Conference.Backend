@@ -4,10 +4,11 @@ using Serilog;
 
 namespace WebApi.Middlewares;
 
-public class LoggingMiddleware(RequestDelegate next)
+public class LoggingMiddleware(RequestDelegate next) : IMiddleware
 {
 	private record LogModel(string? Route, string? Query, int? StatusCode, long ResponseTime);
-	public async Task Invoke(HttpContext context)
+
+	public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 	{
 		var stopwatch = Stopwatch.StartNew();
 		context.Response.OnCompleted(() =>
@@ -26,6 +27,6 @@ public class LoggingMiddleware(RequestDelegate next)
 			}));
 			return Task.CompletedTask;
 		});
-		await next(context);
+		await next.Invoke(context);
 	}
 }

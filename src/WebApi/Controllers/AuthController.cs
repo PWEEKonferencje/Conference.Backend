@@ -13,7 +13,7 @@ namespace WebApi.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [AllowAnonymous]
-public class AuthController(UserManager<UserAccount> userManager, SignInManager<UserAccount> signInManager, IMediator mediator) 
+public class AuthController(IMediator mediator) 
 	: ControllerBase
 {
 	[HttpGet("oauth")]
