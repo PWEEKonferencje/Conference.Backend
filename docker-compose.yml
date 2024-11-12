@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: DevPassword123
+      POSTGRES_DB: ConferenceDb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  migration:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    depends_on:
+      - postgres
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=postgres;Username=dev;Password=DevPassword123;Database=ConferenceDb;"
+    volumes:
+      - ./src/WebApi:/app/WebApi
+      - ./src/Application:/app/Application
+      - ./src/Infrastructure:/app/Infrastructure
+      - ./src/Domain:/app/Domain
+    working_dir: /app/WebApi
+    command: >
+      sh -c "dotnet tool install --global dotnet-ef &&
+             sleep 10 &&
+             /root/.dotnet/tools/dotnet-ef database update --project /app/Infrastructure --startup-project /app/WebApi"
+
+volumes:
+  postgres_data:
