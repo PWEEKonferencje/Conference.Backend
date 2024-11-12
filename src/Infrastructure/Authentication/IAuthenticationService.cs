@@ -11,5 +11,6 @@ public interface IAuthenticationService
 	Task<SignInResult> ExternalLoginSignInAsync(string loginProvider, string providerKey, bool isPersistent);
 	Task<UserAccount?> FindByLoginAsync(string loginProvider, string providerKey);
 	Task<UserAccount?> CreateUserFromExternalAsync(ExternalLoginInfo info);
+	Task<UserAccount?> GetCurrentUserAccount();
 	Task<string> GenerateJwtToken(UserAccount user);
 }

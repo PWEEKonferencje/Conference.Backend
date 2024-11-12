@@ -17,4 +17,16 @@ public class ProfileController (IMediator mediator): ControllerBase
     {
         return (await mediator.Send(new CreateProfileCommand(profileRequest))).ToActionResult(201);
     }
+    
+    [HttpPost("email")]
+    public async Task<IActionResult> AddEmail([FromBody] SetProfileEmailCommand emailCommand)
+    {
+        return (await mediator.Send(emailCommand)).ToActionResult();
+    }
+    
+    [HttpPost("orcid")]
+    public async Task<IActionResult> AddOrcid([FromBody] SetProfileOrcidCommand orcidCommand)
+    {
+        return (await mediator.Send(orcidCommand)).ToActionResult();
+    }
 }
