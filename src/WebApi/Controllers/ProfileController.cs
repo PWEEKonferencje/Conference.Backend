@@ -2,7 +2,6 @@ using Application.Profiles.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Extensions;
-using Microsoft.AspNetCore.Authorization;
 using Domain.Models.Profile;
 
 namespace WebApi.Controllers;

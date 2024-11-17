@@ -1,10 +1,7 @@
 using Application.Authentication.Commands;
-using Domain.Entities.Identity;
 using Domain.Models.Authentication;
-using Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Extensions;
 
@@ -13,7 +10,7 @@ namespace WebApi.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [AllowAnonymous]
-public class AuthController(UserManager<UserAccount> userManager, SignInManager<UserAccount> signInManager, IMediator mediator) 
+public class AuthController(IMediator mediator) 
 	: ControllerBase
 {
 	[HttpGet("oauth")]

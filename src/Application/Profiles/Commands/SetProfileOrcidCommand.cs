@@ -1,10 +1,7 @@
-using Domain.Entities.Identity;
 using Domain.Repositories;
 using Domain.Shared;
 using Infrastructure.Authentication;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 
 namespace Application.Profiles.Commands;
 
