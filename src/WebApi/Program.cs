@@ -15,7 +15,6 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 using WebApi;
-using WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +73,7 @@ builder.Services.AddSwaggerGen(option =>
 		}
 	});
 });
+//builder.Services.AddTransient<LoggingMiddleware>();
 
 
 Log.Logger = new LoggerConfiguration()
@@ -95,7 +95,7 @@ app.Lifetime.ApplicationStarted.Register(() =>
 });
 
 app.UseExceptionHandler(_ => {});
-app.UseMiddleware<LoggingMiddleware>();
+//app.UseMiddleware<LoggingMiddleware>();
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -109,3 +109,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program {}
