@@ -10,7 +10,7 @@ on:
         - main
 
 env:
-    IMAGE_NAME: ghcr.io/PWEEKonferencje/Conference.Backend
+    IMAGE_NAME: ghcr.io/pweekonferencje/conference.backend
 
 jobs:
 
