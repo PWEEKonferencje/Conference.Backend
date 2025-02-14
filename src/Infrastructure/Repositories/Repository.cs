@@ -3,7 +3,7 @@ using Domain.Repositories;
 using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repository;
+namespace Infrastructure.Repositories;
 
 public class Repository<T>(ConferenceDbContext dbContext) : IRepository<T> where T : class
 {

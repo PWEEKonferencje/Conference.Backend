@@ -46,10 +46,10 @@ internal class CreateProfileCommandHandler (IAuthenticationService authenticatio
         }
         
         var userProfile = mapper.Map<User>(request);
-        if (userAccount.UserProfile is not null)
+        if (profile is not null)
         {
-            userProfile.Id = userAccount.UserProfile.Id;
-            userProfile.OrcidId = userAccount.UserProfile.OrcidId;
+            userProfile.OrcidId = profile.OrcidId;
+            profileRepository.Delete(profile, cancellationToken);
         }
         userAccount.UserProfile = userProfile;
         await unitOfWork.SaveChangesAsync(cancellationToken);

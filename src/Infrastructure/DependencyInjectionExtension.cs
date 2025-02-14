@@ -5,7 +5,7 @@ using Domain.Repositories;
 using Infrastructure.Authentication;
 using Infrastructure.Database;
 using Infrastructure.Dictionaries.UniversityNames;
-using Infrastructure.Repository;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
