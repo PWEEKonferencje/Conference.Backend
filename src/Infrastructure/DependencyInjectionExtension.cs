@@ -1,8 +1,11 @@
 using System.Text;
+using Application.Common.Configuration;
+using Application.Common.Services;
 using Domain.Repositories;
 using Infrastructure.Authentication;
 using Infrastructure.Database;
 using Infrastructure.Dictionaries.UniversityNames;
+using Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -73,6 +76,7 @@ public static class DependencyInjectionExtension
         #endregion
         
         services.AddSingleton<IUniversityNameRepository>(_ => new UniversityNameRepository());
+        services.AddScoped<IProfileRepository, ProfileRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 		return services;
 	}

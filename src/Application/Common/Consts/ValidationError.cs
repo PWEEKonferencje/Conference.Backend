@@ -8,4 +8,5 @@ public static class ValidationError
 	public const string InvalidFormat = "Field has invalid format";
 	public const string NotUnique = "Field is not unique";
 	public const string AlreadySet = "Field is already set";
+	public static string MaximumLength(int length) => $"Field cannot be longer than {length} characters";
 }

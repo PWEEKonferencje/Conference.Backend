@@ -1,7 +1,5 @@
-using Application.Authentication.Commands;
-using Domain.Entities.Identity;
-using Domain.Models.Authentication;
-using Domain.Shared;
+using Application.Authentication.OAuthLogin;
+using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,7 +11,7 @@ namespace WebApi.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [AllowAnonymous]
-public class AuthController(UserManager<UserAccount> userManager, SignInManager<UserAccount> signInManager, IMediator mediator) 
+public class AuthController(UserManager<Identity> userManager, SignInManager<Identity> signInManager, IMediator mediator) 
 	: ControllerBase
 {
 	[HttpGet("oauth")]
@@ -25,7 +23,7 @@ public class AuthController(UserManager<UserAccount> userManager, SignInManager<
 	}
 
 	[HttpGet("oauth/callback")]
-	[ProducesResponseType(typeof(LoginResponse), 200)]
+	[ProducesResponseType(typeof(OAuthLoginCallbackResponse), 200)]
 	public async Task<IActionResult> OAuthLoginCallback(string? returnUrl = null, string? remoteError = null)
 	{
 		return (await mediator.Send(new OAuthLoginCallbackCommand(returnUrl, remoteError))).ToActionResult();

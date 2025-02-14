@@ -2,7 +2,7 @@ using Domain.Entities;
 
 namespace Domain.Repositories;
 
-public interface IProfileRepository : IRepository<UserProfile>
+public interface IProfileRepository : IRepository<User>
 {
     
 }
