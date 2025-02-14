@@ -1,6 +1,7 @@
+using Application.Affiliations.CreateAffiliation;
+using Application.Profiles.CreateProfile;
 using AutoMapper;
 using Domain.Entities;
-using Domain.Models.Profile;
 
 namespace Application.Profiles.MapperProfiles;
 
@@ -8,7 +9,13 @@ public class UserProfileProfile : Profile
 {
     public UserProfileProfile()
     {
-        CreateMap<CreateProfileRequest, UserProfile>();
-        CreateMap<UserProfile, CreateProfileResponse>();
+        CreateMap<CreateProfileCommand, User>()
+            .ForMember(x => x.Affiliations,
+                x =>
+                    x.MapFrom(r => r.Affiliations))
+            .ForMember(x => x.IsProfileSetUp,
+                x => 
+                    x.MapFrom(r => true));
+        CreateMap<CreateAffiliationModel, Affiliation>();
     }
 }

@@ -1,5 +1,6 @@
+using Application.Common.Services;
+using Domain.Models.Dictionary;
 using Domain.Shared;
-using Infrastructure.Dictionaries.UniversityNames;
 using MediatR;
 
 namespace Application.Dictionaries.Queries;

@@ -1,6 +1,8 @@
 using System.Collections.Immutable;
 using System.Reflection;
 using System.Text.Json;
+using Application.Common.Services;
+using Domain.Models.Dictionary;
 
 namespace Infrastructure.Dictionaries.UniversityNames;
 

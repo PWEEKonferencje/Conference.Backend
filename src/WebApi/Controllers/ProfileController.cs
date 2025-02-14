@@ -1,8 +1,9 @@
-using Application.Profiles.Commands;
+using Application.Profiles.CreateProfile;
+using Application.Profiles.SetProfileEmail;
+using Application.Profiles.SetProfileOrcid;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Extensions;
-using Domain.Models.Profile;
 
 namespace WebApi.Controllers;
 
@@ -12,9 +13,9 @@ public class ProfileController (IMediator mediator): ControllerBase
 {
     [HttpPost]
     [ProducesResponseType(typeof(CreateProfileResponse), 201)]
-    public async Task<IActionResult> CreateProfile([FromBody] CreateProfileRequest profileRequest)
+    public async Task<IActionResult> CreateProfile([FromBody] CreateProfileCommand profileRequest)
     {
-        return (await mediator.Send(new CreateProfileCommand(profileRequest))).ToActionResult(201);
+        return (await mediator.Send(profileRequest)).ToActionResult(201);
     }
     
     [HttpPost("email")]

@@ -2,7 +2,7 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using Application;
 using Domain;
-using Domain.Entities.Identity;
+using Domain.Entities;
 using Domain.Shared;
 using Infrastructure;
 using Infrastructure.Database;
@@ -29,8 +29,8 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddDomain();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-
-builder.Services.AddIdentity<UserAccount, IdentityRole>()
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddIdentity<Identity, IdentityRole>()
 	.AddEntityFrameworkStores<ConferenceDbContext>();
 builder.Services.AddControllers(options =>
 	{

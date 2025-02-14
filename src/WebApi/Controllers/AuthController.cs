@@ -1,5 +1,4 @@
-using Application.Authentication.Commands;
-using Domain.Models.Authentication;
+using Application.Authentication.OAuthLogin;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +21,7 @@ public class AuthController(IMediator mediator)
 	}
 
 	[HttpGet("oauth/callback")]
-	[ProducesResponseType(typeof(LoginResponse), 200)]
+	[ProducesResponseType(typeof(OAuthLoginCallbackResponse), 200)]
 	public async Task<IActionResult> OAuthLoginCallback(string? returnUrl = null, string? remoteError = null)
 	{
 		return (await mediator.Send(new OAuthLoginCallbackCommand(returnUrl, remoteError))).ToActionResult();
