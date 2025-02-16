@@ -1,4 +1,5 @@
 using Application.Common.Services;
+using Domain.Entities;
 using Domain.Repositories;
 using Domain.Shared;
 using MediatR;
@@ -13,7 +14,7 @@ internal class SetProfileOrcidCommandHandler(IAuthenticationService authenticati
 {
 	public async Task<ICommandResult<SetProfileOrcidResponse>> Handle(SetProfileOrcidCommand request, CancellationToken cancellationToken)
 	{
-		var account = await authenticationService.GetCurrentUserAccount();
+		var account = await authenticationService.GetCurrentIdentity();
 		if (account is null)
 			return CommandResult.Failure<SetProfileOrcidResponse>(ErrorResult.AuthorizationError);
 
@@ -27,6 +28,19 @@ internal class SetProfileOrcidCommandHandler(IAuthenticationService authenticati
 			// send email to identity connected to profile that has that orcid set
 			return CommandResult.Success(new SetProfileOrcidResponse{ProfileAlreadyExists = true});
 		}
+
+		if (account.UserProfileId is not null && profile is not null)
+		{
+			profile.OrcidId = request.OrcidId;
+		}
+		else
+		{
+			account.UserProfile = new User
+			{
+				OrcidId = request.OrcidId
+			};
+		}
+		await unitOfWork.SaveChangesAsync(cancellationToken);
 		
 		return CommandResult.Success(new SetProfileOrcidResponse());
 	}

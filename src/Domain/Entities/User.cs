@@ -4,8 +4,8 @@ public class User
 {
 	public int Id { get; set; }
 	public string? OrcidId { get; set; }
-	public string? Name { get; set; } = default!;
-	public string? Surname { get; set; } = default!;
+	public string? Name { get; set; }
+	public string? Surname { get; set; }
 	public string? Degree { get; set; }
 	public bool IsProfileSetUp { get; set; }
 

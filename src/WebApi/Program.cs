@@ -95,7 +95,6 @@ app.Lifetime.ApplicationStarted.Register(() =>
 });
 
 app.UseExceptionHandler(_ => {});
-//app.UseMiddleware<LoggingMiddleware>();
 
 app.UseSwagger();
 app.UseSwaggerUI();

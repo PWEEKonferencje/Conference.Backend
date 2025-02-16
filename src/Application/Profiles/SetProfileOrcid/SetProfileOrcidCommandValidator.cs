@@ -12,7 +12,7 @@ public class SetProfileOrcidCommandValidator : AbstractValidator<SetProfileOrcid
 			.NotEmpty().WithMessage(ValidationError.NotEmpty)
 			.Matches(@"\d{16}").WithMessage(ValidationError.InvalidFormat)
 			.MustAsync(async (_, _) =>
-				(await userManager.GetCurrentUserAccount())?.UserProfileId is null)
+				(await userManager.GetCurrentIdentity())?.UserProfileId is null)
 			.WithMessage(ValidationError.AlreadySet);
 	}
 }

@@ -1,4 +1,5 @@
 using Application.Common;
+using Application.Conferences;
 using Application.Profiles.MapperProfiles;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +21,8 @@ public static class DependencyInjectionExtension
 		});
 			
 		services.AddValidatorsFromAssembly(typeof(DependencyInjectionExtension).Assembly);
-		services.AddAutoMapper(typeof(UserProfileProfile));
+		services.AddAutoMapper(typeof(UserMappingProfile));
+		services.AddAutoMapper(typeof(ConferenceMappingProfile));
 		return services;
 	}
 }

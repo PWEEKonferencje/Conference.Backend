@@ -8,5 +8,5 @@ public class Identity : IdentityUser
 	public string? OAuthId { get; set; }
 
 	public int? UserProfileId { get; set; }
-	public virtual User? UserProfile { get; set; }
+	public User? UserProfile { get; set; }
 }

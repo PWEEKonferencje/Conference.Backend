@@ -12,7 +12,8 @@ public class CreateProfileCommandHandlerTest(IntegrationTestWebAppFactory factor
 	public async Task ShouldCreateProfile()
 	{
 		// Arrange
-		var command = new CreateProfileCommand{
+		var command = new CreateProfileCommand
+		{
 			Name = Faker.Name.FirstName(),
 			Surname = Faker.Name.LastName(),
 			Degree = "PhD"
