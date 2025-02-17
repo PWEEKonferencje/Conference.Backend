@@ -5,9 +5,9 @@ using Domain.Entities;
 
 namespace Application.Profiles.MapperProfiles;
 
-public class UserProfileProfile : Profile
+public class UserMappingProfile : Profile
 {
-    public UserProfileProfile()
+    public UserMappingProfile()
     {
         CreateMap<CreateProfileCommand, User>()
             .ForMember(x => x.Affiliations,

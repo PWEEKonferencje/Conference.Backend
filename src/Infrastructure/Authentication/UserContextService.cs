@@ -8,13 +8,13 @@ public class UserContextService (IHttpContextAccessor httpContextAccessor) : IUs
 {
     public ClaimsPrincipal? User => httpContextAccessor.HttpContext?.User;
 
-    public int? GetUserId()
+    public string? GetUserId()
     {
         if (User is null)
             return null;
 
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-        return userIdClaim != null ? int.Parse(userIdClaim.Value) : (int?)null;
+        return userIdClaim?.Value;
     }
 
     public string? GetUserName()

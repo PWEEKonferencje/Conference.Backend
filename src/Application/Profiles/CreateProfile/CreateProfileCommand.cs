@@ -24,7 +24,7 @@ internal class CreateProfileCommandHandler (IAuthenticationService authenticatio
 {
     public async Task<ICommandResult<CreateProfileResponse>> Handle(CreateProfileCommand request, CancellationToken cancellationToken)
     {
-        var userAccount = await authenticationService.GetCurrentUserAccount();
+        var userAccount = await authenticationService.GetCurrentIdentity();
         if (userAccount is null)
         {
             return CommandResult.Failure<CreateProfileResponse>(new ErrorResult

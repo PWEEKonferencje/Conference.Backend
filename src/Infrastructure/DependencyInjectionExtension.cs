@@ -1,6 +1,7 @@
 using System.Text;
 using Application.Common.Configuration;
 using Application.Common.Services;
+using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Authentication;
 using Infrastructure.Database;
@@ -77,6 +78,9 @@ public static class DependencyInjectionExtension
         
         services.AddSingleton<IUniversityNameRepository>(_ => new UniversityNameRepository());
         services.AddScoped<IProfileRepository, ProfileRepository>();
+        services.AddScoped<IIdentityRepository, IdentityRepository>();
+        services.AddScoped<IAffiliationRepository, AffiliationRepository>();
+        services.AddScoped<IConferenceRepository, ConferenceRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 		return services;
 	}

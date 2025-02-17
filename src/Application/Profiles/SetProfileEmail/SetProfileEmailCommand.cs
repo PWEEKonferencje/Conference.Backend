@@ -13,7 +13,7 @@ internal class SetProfileEmailCommandHandler(IAuthenticationService authenticati
 {
 	public async Task<ICommandResult<object?>> Handle(SetProfileEmailCommand command, CancellationToken cancellationToken)
 	{
-		var account = await authenticationService.GetCurrentUserAccount();
+		var account = await authenticationService.GetCurrentIdentity();
 		if(account is null)
 			return CommandResult.Failure<object?>(ErrorResult.AuthorizationError);
 		account.Email = command.Email;

@@ -4,6 +4,7 @@ using System.Text;
 using Application.Common.Configuration;
 using Application.Common.Services;
 using Domain.Entities;
+using Domain.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -12,7 +13,8 @@ using IAuthenticationService = Application.Common.Services.IAuthenticationServic
 namespace Infrastructure.Authentication;
 
 public class AuthenticationService(SignInManager<Identity> signInManager, UserManager<Identity> userManager, 
-	AuthenticationConfiguration authenticationConfiguration, IUserContextService userContextService) 
+	AuthenticationConfiguration authenticationConfiguration, IUserContextService userContextService, 
+	IIdentityRepository identityRepository) 
 	: IAuthenticationService
 {
 	public Task<AuthenticationProperties> ConfigureExternalLoginProperties(string provider, string redirectUrl)
@@ -50,12 +52,21 @@ public class AuthenticationService(SignInManager<Identity> signInManager, UserMa
 		return result.Succeeded ? user : null;
 	}
 
-	public async Task<Identity?> GetCurrentUserAccount()
+	public async Task<Identity?> GetCurrentIdentity()
 	{
 		var user = userContextService.User;
 		if (user is null)
 			return null;
 		return await userManager.GetUserAsync(userContextService.User!);
+	}
+
+	public async Task<User?> GetCurrentUser()
+	{
+		var identityId = userContextService.GetUserId();
+		if (identityId is null)
+			return null;
+		var identity = await identityRepository.GetWithUserAsync(identityId);
+		return identity?.UserProfile;
 	}
 
 	public async Task<string> GenerateJwtToken(Identity user)
