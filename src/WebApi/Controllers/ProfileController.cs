@@ -1,6 +1,8 @@
 using Application.Profiles.CreateProfile;
 using Application.Profiles.SetProfileEmail;
 using Application.Profiles.SetProfileOrcid;
+using Application.Affiliations.GetAffiliations;
+using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Extensions;
@@ -29,4 +31,11 @@ public class ProfileController (IMediator mediator): ControllerBase
     {
         return (await mediator.Send(orcidCommand)).ToActionResult();
     }
+
+    [HttpGet("affiliations")]
+    [ProducesResponseType(typeof(GetAffiliationsResponse), 200)]
+    public async Task<IActionResult> GetAffiliationsList()
+    {
+        return (await mediator.Send(new GetAffiliationsQuery())).ToActionResult();
+    }   
 }
