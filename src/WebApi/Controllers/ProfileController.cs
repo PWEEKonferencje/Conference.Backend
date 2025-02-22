@@ -3,6 +3,8 @@ using Application.Profiles.SetProfileEmail;
 using Application.Profiles.SetProfileOrcid;
 using Application.Affiliations.GetAffiliations;
 using Application.Affiliations.CreateAffiliation;
+using Application.Affiliations.ModifyAffiliation;
+using Domain.Models.Affiliations;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -46,4 +48,11 @@ public class ProfileController (IMediator mediator): ControllerBase
         var affiliationCommand = new CreateAffiliationCommand(createAffiliationModel);
         return (await mediator.Send(affiliationCommand)).ToActionResult(201);
     }   
+
+    [HttpPut("affiliations")]
+    public async Task<IActionResult> ModifyAffiliation([FromBody] AffiliationModel affiliationModel)
+    {
+        var affiliationCommand = new ModifyAffiliationCommand(affiliationModel);
+        return (await mediator.Send(affiliationCommand)).ToActionResult();
+    } 
 }

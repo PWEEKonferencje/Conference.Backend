@@ -11,5 +11,6 @@ public class AffiliationsMappingProfile : Profile
         CreateMap<Affiliation, AffiliationModel>();
         CreateMap<List<Affiliation>, GetAffiliationsResponse>()
             .ForMember(dest => dest.Affiliations, opt => opt.MapFrom(src => src));
+        CreateMap<AffiliationModel, Affiliation>();
     }
 }
