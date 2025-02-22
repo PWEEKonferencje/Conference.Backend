@@ -81,6 +81,7 @@ public static class DependencyInjectionExtension
         services.AddScoped<IIdentityRepository, IdentityRepository>();
         services.AddScoped<IAffiliationRepository, AffiliationRepository>();
         services.AddScoped<IConferenceRepository, ConferenceRepository>();
+        services.AddScoped<IAttendeeRepository, AttendeeRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 		return services;
 	}
