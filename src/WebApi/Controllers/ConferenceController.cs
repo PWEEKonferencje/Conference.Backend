@@ -1,4 +1,4 @@
-using Application.Attendees.JoinConference;
+using Application.Conferences.JoinConference;
 using Application.Conferences.CreateConference;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +17,9 @@ public class ConferenceController(IMediator mediator) : ControllerBase
 		return (await mediator.Send(command)).ToActionResult(201);
 	}
 	
-	[HttpPost("{conferenceId}/sign")]
+	[HttpPost("{conferenceId}/join")]
 	[ProducesResponseType<JoinConferenceResponse>(200)]
-	public async Task<IActionResult> CreateConferenceAttendee([FromRoute] int conferenceId, [FromQuery] Guid affiliationId)
+	public async Task<IActionResult> JoinConference([FromRoute] int conferenceId, [FromQuery] Guid affiliationId)
 	{
 		return (await mediator.Send(new JoinConferenceCommand(conferenceId, affiliationId))).ToActionResult();
 	}	

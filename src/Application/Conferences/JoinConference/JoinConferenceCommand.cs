@@ -7,13 +7,13 @@ using Domain.Repositories;
 using Domain.Shared;
 using MediatR;
 
-namespace Application.Attendees.JoinConference;
+namespace Application.Conferences.JoinConference;
 
 public record JoinConferenceCommand(int ConferenceId, Guid AffiliationId)
     : IRequest<ICommandResult<JoinConferenceResponse>>;
 
 
-internal class EnterConferenceAttendeeCommandHandler (IAuthenticationService authenticationService, 
+internal class JoinConferenceCommandHandler (IAuthenticationService authenticationService, 
     IUnitOfWork unitOfWork, IConferenceRepository conferenceRepository, IAffiliationRepository affiliationRepository,
     IAttendeeRepository attendeeRepository) 
     : IRequestHandler<JoinConferenceCommand, ICommandResult<JoinConferenceResponse>>

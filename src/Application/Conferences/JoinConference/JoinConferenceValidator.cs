@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Attendees.JoinConference;
+namespace Application.Conferences.JoinConference;
 
 public class JoinConferenceValidator : AbstractValidator<JoinConferenceCommand>
 {
