@@ -2,6 +2,7 @@ using Application.Profiles.CreateProfile;
 using Application.Profiles.SetProfileEmail;
 using Application.Profiles.SetProfileOrcid;
 using Application.Affiliations.GetAffiliations;
+using Application.Affiliations.CreateAffiliation;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -37,5 +38,12 @@ public class ProfileController (IMediator mediator): ControllerBase
     public async Task<IActionResult> GetAffiliationsList()
     {
         return (await mediator.Send(new GetAffiliationsQuery())).ToActionResult();
+    }   
+
+    [HttpPost("affiliations")]
+    public async Task<IActionResult> CreateAffiliation([FromBody] CreateAffiliationModel createAffiliationModel)
+    {
+        var affiliationCommand = new CreateAffiliationCommand(createAffiliationModel);
+        return (await mediator.Send(affiliationCommand)).ToActionResult(201);
     }   
 }
