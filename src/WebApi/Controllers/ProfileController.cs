@@ -4,6 +4,7 @@ using Application.Profiles.SetProfileOrcid;
 using Application.Affiliations.GetAffiliations;
 using Application.Affiliations.CreateAffiliation;
 using Application.Affiliations.ModifyAffiliation;
+using Application.Affiliations.DeleteAffiliation;
 using Domain.Models.Affiliations;
 using Domain.Entities;
 using MediatR;
@@ -55,4 +56,10 @@ public class ProfileController (IMediator mediator): ControllerBase
         var affiliationCommand = new ModifyAffiliationCommand(affiliationModel);
         return (await mediator.Send(affiliationCommand)).ToActionResult();
     } 
+
+    [HttpDelete("affiliations/{id}")]
+    public async Task<IActionResult> DeleteAffiliation(Guid id)
+    {
+        return (await mediator.Send(new DeleteAffiliationCommand(id))).ToActionResult(204);
+    }
 }
