@@ -9,7 +9,7 @@ namespace WebApi.Controllers;
 [Route("api/[controller]")]
 public class ConferenceController(IMediator mediator) : ControllerBase
 {
-	[HttpPost("/create")]
+	[HttpPost("create")]
 	[ProducesResponseType<CreateConferenceResponse>(201)]
 	public async Task<IActionResult> CreateConference([FromBody] CreateConferenceCommand command)
 	{
