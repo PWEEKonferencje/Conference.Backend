@@ -74,7 +74,15 @@ builder.Services.AddSwaggerGen(option =>
 	});
 });
 //builder.Services.AddTransient<LoggingMiddleware>();
-
+builder.Services.AddCors(options =>
+{
+	options.AddDefaultPolicy(b =>
+	{
+		b.AllowAnyOrigin()
+			.AllowAnyMethod()
+			.AllowAnyHeader();
+	});
+});
 
 Log.Logger = new LoggerConfiguration()
 	.WriteTo.Debug(restrictedToMinimumLevel: LogEventLevel.Debug)
@@ -93,6 +101,8 @@ app.Lifetime.ApplicationStarted.Register(() =>
 		Log.Information("Swagger running at {Url}/swagger/index.html", i);
 	}	
 });
+
+app.UseCors();
 
 app.UseExceptionHandler(_ => {});
 

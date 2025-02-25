@@ -1,3 +1,5 @@
+using Domain.ValueObjects;
+
 namespace Domain.Entities;
 
 public class Conference
@@ -10,6 +12,8 @@ public class Conference
 	public DateTime EndDate { get; set; }
 	public DateTime RegistrationDeadline { get; set; }
 	public DateTime ArticlesDeadline { get; set; }
+	public bool IsPublic { get; set; }
+	public Address Address { get; set; } = default!;
 
 	public virtual List<Attendee> Attendees { get; set; } = [];
 }

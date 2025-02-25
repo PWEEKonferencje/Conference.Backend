@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Domain.Models;
 
 namespace Domain.Repositories;
 
@@ -15,4 +16,7 @@ public interface IRepository<T> where T : class
 		CancellationToken cancellationToken = default);
 
 	Task<bool> ExistAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
+
+	Task<PagedList<T>> GetPage(int page, int pageSize, Expression<Func<T, bool>>? predicate = null, 
+		Expression<Func<T, object>>? orderBy = null, bool orderAsc = true, CancellationToken cancellationToken = default);
 }

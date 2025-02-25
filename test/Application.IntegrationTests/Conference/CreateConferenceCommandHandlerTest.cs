@@ -1,5 +1,7 @@
 using Application.Conferences.CreateConference;
 using Domain.Entities;
+using Domain.Models.Conference;
+using Domain.ValueObjects;
 using FluentAssertions;
 using IntegrationTests.Base;
 using IntegrationTests.Base.Helpers;
@@ -23,7 +25,16 @@ public class CreateConferenceCommandHandlerTest(IntegrationTestWebAppFactory fac
 			EndDate = DateTime.UtcNow.AddDays(3),
 			ArticlesDeadline = DateTime.UtcNow.AddDays(1),
 			RegistrationDeadline = DateTime.UtcNow.AddDays(1),
-			UserAffiliationId = affiliationId
+			UserAffiliationId = affiliationId,
+			Address = new AddressModel
+			{
+				PlaceName = Faker.Company.CatchPhrase(),
+				City = Faker.Address.USCity(),
+				AddressLine1 = Faker.Address.StreetName(),
+				AddressLine2 = Faker.Address.SecondaryAddress(),
+				Country = "Poland",
+				ZipCode = "11-111"
+			}
 		};
 		
 		new IdentityBuilder()

@@ -1,6 +1,8 @@
 using System.Linq.Expressions;
+using Domain.Models;
 using Domain.Repositories;
 using Infrastructure.Database;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
@@ -41,4 +43,27 @@ public class Repository<T>(ConferenceDbContext dbContext) : IRepository<T> where
 
 	public Task<bool> ExistAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
 		=> _dbContext.Set<T>().AnyAsync(predicate, cancellationToken);
+	
+	public Task<PagedList<T>> GetPage(int page, int pageSize, Expression<Func<T, bool>>? predicate = null, 
+		Expression<Func<T, object>>? orderBy = null, bool orderAsc = true, CancellationToken cancellationToken = default)
+	{
+		var query = _dbContext.Set<T>().AsQueryable();
+		if (predicate is not null)
+			query = query.Where(predicate);
+		
+		if (orderBy is not null && orderAsc)
+			query = query.OrderBy(orderBy);
+		else if(orderBy is not null && !orderAsc)
+			query = query.OrderByDescending(orderBy);
+			
+		return QueryToPagedList(query, page, pageSize, cancellationToken);
+	}
+
+	protected async Task<PagedList<TModel>> QueryToPagedList<TModel>(IQueryable<TModel> query, int page, int pageSize, CancellationToken cancellationToken)
+	{
+		var totalCount = await query.CountAsync(cancellationToken);
+		var items = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
+		
+		return new PagedList<TModel>(items, page, pageSize, totalCount);
+	}
 }

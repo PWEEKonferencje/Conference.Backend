@@ -2,8 +2,10 @@ using Application.Common.Services;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
+using Domain.Models.Conference;
 using Domain.Repositories;
 using Domain.Shared;
+using Domain.ValueObjects;
 using MediatR;
 
 namespace Application.Conferences.CreateConference;
@@ -16,7 +18,9 @@ public record CreateConferenceCommand : IRequest<ICommandResult<CreateConference
 	public DateTime EndDate { get; set; }
 	public DateTime RegistrationDeadline { get; set; }
 	public DateTime ArticlesDeadline { get; set; }
-	public Guid UserAffiliationId { get; set; } = default!;
+	public Guid UserAffiliationId { get; set; }
+	public bool IsPublic { get; set; } = true;
+	public AddressModel Address { get; set; } = default!;
 }
 
 internal class CreateConferenceCommandHandler(IAuthenticationService authenticationService, IMapper mapper, 
