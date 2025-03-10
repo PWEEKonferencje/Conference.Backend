@@ -25,6 +25,13 @@ public static class DependencyInjectionExtension
 		// Add infrastructure services here
 		services.AddDbContext<ConferenceDbContext>(options =>
 			options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+		if (configuration.GetValue<bool>("Database:AutoMigrate"))
+		{
+			var dbCtx = services.BuildServiceProvider().GetRequiredService<ConferenceDbContext>();
+			dbCtx.Database.Migrate();
+			dbCtx.Database.EnsureCreated();
+		}
 		
         #region Authentication
         services.AddScoped<IAuthenticationService, AuthenticationService>();
