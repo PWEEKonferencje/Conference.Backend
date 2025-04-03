@@ -8,6 +8,7 @@ using Infrastructure.Database;
 using Infrastructure.Dictionaries.UniversityNames;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -78,6 +79,7 @@ public static class DependencyInjectionExtension
 		        githubOptions.AuthorizationEndpoint = "https://github.com/login/oauth/authorize";
 		        githubOptions.TokenEndpoint = "https://github.com/login/oauth/access_token";
 		        githubOptions.UserInformationEndpoint = "https://api.github.com/user";
+		        githubOptions.CallbackPath = new PathString("/api/signin-github");
 	        });
         services.AddScoped<IUserContextService, UserContextService>();
         services.AddHttpContextAccessor();
