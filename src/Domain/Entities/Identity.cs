@@ -9,4 +9,7 @@ public class Identity : IdentityUser
 
 	public int? UserProfileId { get; set; }
 	public User? UserProfile { get; set; }
+
+	public bool IsAccountSetupFinished()
+		=> UserProfile is not null && UserProfile.IsProfileSetUp;
 }
