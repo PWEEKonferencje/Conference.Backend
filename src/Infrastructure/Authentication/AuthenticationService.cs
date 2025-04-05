@@ -22,22 +22,24 @@ public class AuthenticationService(SignInManager<Identity> signInManager, UserMa
 		return Task.FromResult(signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl));
 	}
 
-	public async Task<ExternalLoginInfo?> GetExternalLoginInfoAsync()
+	public async Task<Identity?> ExternalLoginOrRegisterAsync()
 	{
-		return await signInManager.GetExternalLoginInfoAsync();
+		var loginInfo = await signInManager.GetExternalLoginInfoAsync();
+		if (loginInfo is null)
+			return null;
+		var signInResult = await signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, false);
+		if (signInResult.Succeeded)
+			return await Login(loginInfo);
+		return await Register(loginInfo);
 	}
 
-	public async Task<SignInResult> ExternalLoginSignInAsync(string loginProvider, string providerKey, bool isPersistent)
+	private async Task<Identity?> Login(ExternalLoginInfo info)
 	{
-		return await signInManager.ExternalLoginSignInAsync(loginProvider, providerKey, isPersistent);
+		return await identityRepository.GetWithUserAsync(x 
+			=> x.OAuthId == info.ProviderKey && x.OAuthProvider == info.LoginProvider);
 	}
 
-	public async Task<Identity?> FindByLoginAsync(string loginProvider, string providerKey)
-	{
-		return await userManager.FindByLoginAsync(loginProvider, providerKey);
-	}
-
-	public async Task<Identity?> CreateUserFromExternalAsync(ExternalLoginInfo info)
+	private async Task<Identity?> Register(ExternalLoginInfo info)
 	{
 		var user = new Identity
 		{
@@ -65,7 +67,7 @@ public class AuthenticationService(SignInManager<Identity> signInManager, UserMa
 		var identityId = userContextService.GetUserId();
 		if (identityId is null)
 			return null;
-		var identity = await identityRepository.GetWithUserAsync(identityId);
+		var identity = await identityRepository.GetWithUserAsync(x => x.Id == identityId);
 		return identity?.UserProfile;
 	}
 

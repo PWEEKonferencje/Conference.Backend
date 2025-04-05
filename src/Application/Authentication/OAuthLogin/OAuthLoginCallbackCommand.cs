@@ -21,43 +21,26 @@ internal class ExternalLoginCallbackCommandHandler(IAuthenticationService authen
 				ErrorCode = $"There was an external provider error: {request.RemoteError}"
 			});
 		}
-		var info = await authenticationService.GetExternalLoginInfoAsync();
-		if (info is null)
-		{
+
+		var user = await authenticationService.ExternalLoginOrRegisterAsync();
+		if (user is null)
 			return CommandResult.Failure<OAuthLoginCallbackResponse>(new ErrorResult
 			{
 				StatusCode = HttpStatusCode.BadRequest,
-				ErrorDescription = "External Login Info Error",
-				ErrorCode = "There was an error getting the external login info"
+				ErrorCode = "LoginError",
+				ErrorDescription = "There was an error logging in with the external provider.",
 			});
-		}
 		
-		var signInResult = await authenticationService.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
-		if (signInResult.Succeeded)
-		{
-			var user = await authenticationService.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
-			return CommandResult.Success(new OAuthLoginCallbackResponse
-			{
-				AccessToken = await authenticationService.GenerateJwtToken(user!),
-				IsAccountSetupFinished = user!.UserProfileId is not null
-			});
-		}
-		var newUser = await authenticationService.CreateUserFromExternalAsync(info);
-		if(newUser is null)
-			return CommandResult.Failure<OAuthLoginCallbackResponse>(new ErrorResult
-			{
-				StatusCode = HttpStatusCode.InternalServerError,
-				ErrorDescription = "User Creation Error",
-				ErrorCode = "There was an error creating the user"
-			});
-		var token = await authenticationService.GenerateJwtToken(newUser);
-		var isEmailProvided = !string.IsNullOrEmpty(newUser.Email);
+		var token = await authenticationService.GenerateJwtToken(user);
+		var isEmailProvided = !string.IsNullOrEmpty(user.Email);
+		var isAccountSetupFinished = user.IsAccountSetupFinished();
 		
-		return CommandResult.Success(new OAuthLoginCallbackResponse
-		{
-			AccessToken = token,
-			IsAccountSetupFinished = false,
-			IsEmailProvided = isEmailProvided
-		});
+		var response = new OAuthLoginCallbackResponse(
+			token, 
+			isAccountSetupFinished, 
+			isEmailProvided, 
+			request.ReturnUrl);
+		
+		return CommandResult.Success(response);
 	}
 }

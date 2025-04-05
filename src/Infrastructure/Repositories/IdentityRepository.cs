@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Database;
@@ -7,10 +8,10 @@ namespace Infrastructure.Repositories;
 
 public class IdentityRepository(ConferenceDbContext dbContext) : Repository<Identity>(dbContext), IIdentityRepository
 {
-	public async Task<Identity?> GetWithUserAsync(string id)
+	public async Task<Identity?> GetWithUserAsync(Expression<Func<Identity, bool>> predicate)
 	{
 		return await dbContext.UserIdentities
 			.Include(x => x.UserProfile)
-			.FirstOrDefaultAsync(x => x.Id == id);
+			.FirstOrDefaultAsync(predicate);
 	}
 }

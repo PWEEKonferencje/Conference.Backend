@@ -1,5 +1,6 @@
 using Application.Common.Configuration;
 using Application.Common.Consts;
+using Application.Common.Extensions;
 using FluentValidation;
 
 namespace Application.Authentication.OAuthLogin;
@@ -12,6 +13,6 @@ public class OAuthLoginCommandValidator : AbstractValidator<OAuthLoginCommand>
 			.NotEmpty().WithMessage(ValidationError.NotEmpty)
 			.Must(x => authenticationConfiguration.Providers.Contains(x)).WithMessage("Invalid provider");
 		RuleFor(x => x.ReturnUrl)
-			.NotEmpty();
+			.ValidUrl();
 	}
 }
