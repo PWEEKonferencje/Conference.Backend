@@ -12,7 +12,5 @@ public class ModifyAffiliationValidator : AbstractValidator<ModifyAffiliationCom
         RuleFor(x => x.affiliation.Position)
             .NotEmpty()
             .MaximumLength(100);
-        RuleFor(x => x.affiliation.Description)
-            .MaximumLength(500);
 	}
 }

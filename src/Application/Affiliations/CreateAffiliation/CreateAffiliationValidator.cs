@@ -12,7 +12,5 @@ public class CreateAffiliationValidator : AbstractValidator<CreateAffiliationMod
 		RuleFor(x => x.Position)
 			.NotEmpty()
 			.MaximumLength(100);
-		RuleFor(x => x.Description)
-			.MaximumLength(500);
 	}
 }
