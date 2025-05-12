@@ -13,8 +13,5 @@ public class AffiliationConfiguration : IEntityTypeConfiguration<Affiliation>
 		
 		builder.Property(x => x.Position)
 			.HasMaxLength(100);
-		
-		builder.Property(x => x.Description)
-			.HasMaxLength(500);
 	}
 }
