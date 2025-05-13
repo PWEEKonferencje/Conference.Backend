@@ -5,6 +5,7 @@ using Application.Affiliations.GetAffiliations;
 using Application.Affiliations.CreateAffiliation;
 using Application.Affiliations.ModifyAffiliation;
 using Application.Affiliations.DeleteAffiliation;
+using Application.Profiles.GetProfileSetupInfo;
 using Domain.Models.Affiliations;
 using Domain.Entities;
 using MediatR;
@@ -22,6 +23,13 @@ public class ProfileController (IMediator mediator): ControllerBase
     public async Task<IActionResult> CreateProfile([FromBody] CreateProfileCommand profileRequest)
     {
         return (await mediator.Send(profileRequest)).ToActionResult(201);
+    }
+    
+    [HttpGet("setupinfo")]
+    [ProducesResponseType(typeof(GetProfileSetupInfoResponse), 200)]
+    public async Task<IActionResult> GetProfileSetupInfo()
+    {
+        return (await mediator.Send(new GetProfileSetupInfoQuery())).ToActionResult();
     }
     
     [HttpPost("email")]
