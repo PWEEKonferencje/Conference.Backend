@@ -8,7 +8,7 @@ public static class FluentValidatorExtension
 		(this IRuleBuilder<T, string> ruleBuilder)
 	{
 		return ruleBuilder
-			.Must(x => string.IsNullOrEmpty(x) || Uri.TryCreate(x, UriKind.Absolute, out _))
+			.Must(x => string.IsNullOrWhiteSpace(x) || Uri.TryCreate(x, UriKind.RelativeOrAbsolute, out _))
 			.WithMessage("Invalid URL");
 	}
 }
