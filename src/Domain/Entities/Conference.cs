@@ -16,4 +16,6 @@ public class Conference
 	public Address Address { get; set; } = default!;
 
 	public virtual List<Attendee> Attendees { get; set; } = [];
+
+	public virtual List<ConferenceTrack> ConferenceTracks { get; set; } = [];
 }
