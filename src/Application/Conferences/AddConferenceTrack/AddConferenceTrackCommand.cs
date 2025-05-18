@@ -17,7 +17,7 @@ public record AddConferenceTrackCommand : IRequest<ICommandResult<AddConferenceT
 }
 
 internal class AddConferenceTrackCommandHandler(IAuthenticationService authenticationService, IMapper mapper, 
-    IConferenceRepository conferenceRepository, IUnitOfWork unitOfWork) 
+    IConferenceRepository conferenceRepository, IAttendeeRepository attendeeRepository, IUnitOfWork unitOfWork) 
     : IRequestHandler<AddConferenceTrackCommand, ICommandResult<AddConferenceTrackResponse>>
 {
     public async Task<ICommandResult<AddConferenceTrackResponse>> Handle(AddConferenceTrackCommand request, CancellationToken cancellationToken)
@@ -30,14 +30,12 @@ internal class AddConferenceTrackCommandHandler(IAuthenticationService authentic
         if (conference is null)
             return CommandResult.Failure<AddConferenceTrackResponse>(
                 ErrorResult.DomainError([new Error("Conference not found.", nameof(request.ConferenceId))]));
-        var isOrganizer = conference.Attendees.Any(attendee =>
-            attendee.UserId == user.Id &&
-            attendee.Roles.Any(role => role.RoleEnum == AttendeeRoleEnum.Organizer));
+        
+        var isOrganizer = await attendeeRepository.UserHasRoleAsync(user.Id, request.ConferenceId, AttendeeRoleEnum.Organizer);
 
         if (!isOrganizer)
             return CommandResult.Failure<AddConferenceTrackResponse>(
                 ErrorResult.AuthorizationError);
-        
         var track = mapper.Map<ConferenceTrack>(request);
         conference.ConferenceTracks.Add(track);
         

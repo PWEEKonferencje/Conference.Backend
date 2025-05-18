@@ -26,10 +26,10 @@ public class ConferenceController(IMediator mediator) : ControllerBase
 	}
 	
 	[HttpPost("{conferenceId}/track/add")]
-	[ProducesResponseType<AddConferenceTrackResponse>(201)]
+	[ProducesResponseType<AddConferenceTrackResponse>(200)]
 	public async Task<IActionResult> AddConferenceTrack([FromRoute] int conferenceId, [FromBody] AddConferenceTrackCommand command)
 	{
-		return (await mediator.Send(command)).ToActionResult(201);
+		return (await mediator.Send(command)).ToActionResult(200);
 	}
 	
 	

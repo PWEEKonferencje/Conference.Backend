@@ -12,6 +12,9 @@ public class ConferenceTrackConfiguration: IEntityTypeConfiguration<ConferenceTr
             .HasMaxLength(150)
             .IsRequired()
             .IsUnicode();
-
+        
+        builder.Property(x => x.Description)
+            .HasMaxLength(1000);
+        
     }
 }
