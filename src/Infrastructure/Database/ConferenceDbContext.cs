@@ -14,4 +14,5 @@ public class ConferenceDbContext(DbContextOptions<ConferenceDbContext> options)
 	public DbSet<Conference> Conferences { get; set; } = default!;
 	public DbSet<AttendeeRole> AttendeeRoles { get; set; } = default!;
 	public DbSet<UserSnapshot> UserSnapshots { get; set; } = default!;
+	public DbSet<Invitation> Invitations { get; set; } = default!;
 }
