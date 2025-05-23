@@ -1,3 +1,4 @@
+using Application.Conferences.AddConferenceTrack;
 using Application.Conferences.JoinConference;
 using Application.Conferences.CreateConference;
 using MediatR;
@@ -22,5 +23,14 @@ public class ConferenceController(IMediator mediator) : ControllerBase
 	public async Task<IActionResult> JoinConference([FromRoute] int conferenceId, [FromQuery] Guid affiliationId)
 	{
 		return (await mediator.Send(new JoinConferenceCommand(conferenceId, affiliationId))).ToActionResult();
-	}	
+	}
+	
+	[HttpPost("{conferenceId}/track/add")]
+	[ProducesResponseType<AddConferenceTrackResponse>(200)]
+	public async Task<IActionResult> AddConferenceTrack([FromRoute] int conferenceId, [FromBody] AddConferenceTrackCommand command)
+	{
+		return (await mediator.Send(command)).ToActionResult(200);
+	}
+	
+	
 }
