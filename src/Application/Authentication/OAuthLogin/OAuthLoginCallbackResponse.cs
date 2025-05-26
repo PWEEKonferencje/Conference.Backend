@@ -20,6 +20,14 @@ public class OAuthLoginCallbackResponse
 				Fragment = $"token={accessToken}",
 				Query = $"isAccountSetupFinished={isAccountSetupFinished}&isEmailProvided={isEmailProvided}"
 			};
+			if (!string.IsNullOrEmpty(builder.Query))
+			{
+				builder.Query += $"&isAccountSetupFinished={isAccountSetupFinished}&isEmailProvided={isEmailProvided}";
+			}
+			else
+			{
+				builder.Query = $"isAccountSetupFinished={isAccountSetupFinished}&isEmailProvided={isEmailProvided}";
+			}
 			RedirectUrl = builder.Uri;
 		}
 		catch (UriFormatException ex)

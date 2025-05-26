@@ -1,6 +1,9 @@
 using Application.Conferences.AddConferenceTrack;
 using Application.Conferences.JoinConference;
 using Application.Conferences.CreateConference;
+using Application.Invitations.CreateInvitation;
+using Domain.Enums;
+using Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Extensions;
@@ -32,5 +35,11 @@ public class ConferenceController(IMediator mediator) : ControllerBase
 		return (await mediator.Send(command)).ToActionResult(200);
 	}
 	
-	
+	[HttpPost("{conferenceId}/createInvitation")]
+	[ProducesResponseType<CreateInvitationResponse>(200)]
+	[ProducesResponseType<ErrorResult>(403)]
+	public async Task<IActionResult> CreateInvitation([FromRoute] int conferenceId, [FromQuery] InvitationType invitationType)
+	{
+		return (await mediator.Send(new CreateInvitationCommand(conferenceId, invitationType))).ToActionResult();
+	}
 }
