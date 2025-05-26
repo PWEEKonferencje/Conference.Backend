@@ -17,8 +17,7 @@ public class OAuthLoginCallbackResponse
 		{
 			var builder = new UriBuilder(redirectUrl)
 			{
-				Fragment = $"token={accessToken}",
-				Query = $"isAccountSetupFinished={isAccountSetupFinished}&isEmailProvided={isEmailProvided}"
+				Fragment = $"token={accessToken}"
 			};
 			if (!string.IsNullOrEmpty(builder.Query))
 			{
