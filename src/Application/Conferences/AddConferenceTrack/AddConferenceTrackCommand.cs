@@ -36,8 +36,8 @@ internal class AddConferenceTrackCommandHandler(IAuthenticationService authentic
         if (!isOrganizer)
             return CommandResult.Failure<AddConferenceTrackResponse>(
                 ErrorResult.AuthorizationError);
-        var track = mapper.Map<ConferenceTrack>(request);
-        conference.ConferenceTracks.Add(track);
+        var track = mapper.Map<Track>(request);
+        conference.Tracks.Add(track);
         
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return CommandResult.Success(new AddConferenceTrackResponse { Id = track.Id });

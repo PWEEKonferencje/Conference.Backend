@@ -1,6 +1,6 @@
 namespace Domain.Entities;
 
-public class ConferenceTrack
+public class Track
 {
     public int Id { get; set; }
     public string Name { get; set; } = default!;

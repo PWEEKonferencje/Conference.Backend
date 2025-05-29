@@ -46,6 +46,7 @@ builder.Services.AddControllers(options =>
 		options.JsonSerializerOptions.WriteIndented = true;
 		options.JsonSerializerOptions.AllowTrailingCommas = true;
 		options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+		options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
 	});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>

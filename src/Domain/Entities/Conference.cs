@@ -17,5 +17,5 @@ public class Conference
 
 	public virtual List<Attendee> Attendees { get; set; } = [];
 
-	public virtual List<ConferenceTrack> ConferenceTracks { get; set; } = [];
+	public virtual List<Track> Tracks { get; set; } = [];
 }
