@@ -12,7 +12,7 @@ public class ConferenceDbContext(DbContextOptions<ConferenceDbContext> options)
 	public DbSet<Affiliation> Affiliations { get; set; } = default!;
 	public DbSet<Attendee> Attendees { get; set; } = default!;
 	public DbSet<Conference> Conferences { get; set; } = default!;
-	public DbSet<ConferenceTrack> ConferenceTracks { get; set; } = default!;
+	public DbSet<Track> Tracks { get; set; } = default!;
 	public DbSet<AttendeeRole> AttendeeRoles { get; set; } = default!;
 	public DbSet<UserSnapshot> UserSnapshots { get; set; } = default!;
 	public DbSet<Invitation> Invitations { get; set; } = default!;

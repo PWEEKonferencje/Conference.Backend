@@ -2,6 +2,7 @@ using Application.Conferences.AddConferenceTrack;
 using Application.Conferences.JoinConference;
 using Application.Conferences.CreateConference;
 using Application.Invitations.CreateInvitation;
+using Application.Invitations.GetInvitationDetails;
 using Domain.Enums;
 using Domain.Shared;
 using MediatR;
@@ -28,11 +29,11 @@ public class ConferenceController(IMediator mediator) : ControllerBase
 		return (await mediator.Send(new JoinConferenceCommand(conferenceId, affiliationId))).ToActionResult();
 	}
 	
-	[HttpPost("{conferenceId}/track/add")]
+	[HttpPost("track/add")]
 	[ProducesResponseType<AddConferenceTrackResponse>(200)]
-	public async Task<IActionResult> AddConferenceTrack([FromRoute] int conferenceId, [FromBody] AddConferenceTrackCommand command)
+	public async Task<IActionResult> AddConferenceTrack([FromBody] AddConferenceTrackCommand command)
 	{
-		return (await mediator.Send(command)).ToActionResult(200);
+		return (await mediator.Send(command)).ToActionResult();
 	}
 	
 	[HttpPost("{conferenceId}/createInvitation")]
@@ -41,5 +42,12 @@ public class ConferenceController(IMediator mediator) : ControllerBase
 	public async Task<IActionResult> CreateInvitation([FromRoute] int conferenceId, [FromQuery] InvitationType invitationType)
 	{
 		return (await mediator.Send(new CreateInvitationCommand(conferenceId, invitationType))).ToActionResult();
+	}
+
+	[HttpGet("invitation/{invitationId:guid}")]
+	[ProducesResponseType<GetInvitationDetailsResponse>(200)]
+	public async Task<IActionResult> GetInvitation([FromRoute] Guid invitationId)
+	{
+		return (await mediator.Send(new GetInvitationDetailsQuery(invitationId))).ToActionResult();
 	}
 }
