@@ -14,6 +14,8 @@ public class Attendee
 	public int UserId { get; set; }
 	public User User { get; set; } = default!;
 
+	public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
 	public Guid UserSnapshotId { get; set; }
 	public UserSnapshot UserSnapshot { get; set; } = default!;
 
