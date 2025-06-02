@@ -13,6 +13,6 @@ public class ConferenceMappingProfile : Profile
 		CreateMap<CreateConferenceCommand, Conference>()
 			.ForMember(x => x.Address, r => r.MapFrom(x => x.Address));
 		CreateMap<AddressModel, Address>();
-		CreateMap<UserSnapshotModel, UserSnapshot>();
+		CreateMap<UserSnapshot, UserSnapshotModel>();
 	}
 }
