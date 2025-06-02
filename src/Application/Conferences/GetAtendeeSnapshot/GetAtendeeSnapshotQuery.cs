@@ -6,6 +6,7 @@ using Domain.Shared;
 using Domain.Models.Conference;
 using MediatR;
 using Application.Conferences.GetAtendeeSnapshot;
+using System.Net;
 namespace Application.Conferences.GetAtendeeSnapshot;
 
 public record GetAtendeeSnapshotQuery(int ConferenceId, int AtendeeId) : IRequest<IQueryResult<GetAtendeeSnapshotResponse>>;
@@ -19,9 +20,16 @@ internal class GetAtendeeSnapshotQueryHandler(IAuthenticationService authenticat
 		if (user is null || user.IsProfileSetUp is false)
 			return QueryResult.Failure<GetAtendeeSnapshotResponse>(ErrorResult.AuthorizationError);
 
-		var attendee = await attendeeRepository.GetFirstAsync(
-			x => x.ConferenceId == request.ConferenceId && x.Id == request.AtendeeId , cancellationToken);
-		
+		var attendee = await attendeeRepository.GetWithUserSnapshotAsync(
+			x => x.ConferenceId == request.ConferenceId && x.Id == request.AtendeeId);
+
+		if (attendee is null)
+			return QueryResult.Failure<GetAtendeeSnapshotResponse>(new ErrorResult
+            {
+                ErrorCode = "Attendee SnapShot not found",
+                StatusCode = HttpStatusCode.NotFound,
+            });
+
 		var userSnapshotModel = mapper.Map<UserSnapshotModel>(attendee.UserSnapshot);
 		userSnapshotModel.CreatedAt=attendee.CreatedAt;
 
