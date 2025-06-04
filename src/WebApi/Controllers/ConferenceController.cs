@@ -3,7 +3,7 @@ using Application.Conferences.JoinConference;
 using Application.Conferences.CreateConference;
 using Application.Invitations.CreateInvitation;
 using Application.Invitations.GetInvitationDetails;
-using Application.Conferences.GetAtendeeSnapshot;
+using Application.Conferences.GetAttendeeSnapshot;
 using Domain.Enums;
 using Domain.Shared;
 using MediatR;
@@ -53,9 +53,9 @@ public class ConferenceController(IMediator mediator) : ControllerBase
 	}
 
 	[HttpGet("attendee/{attendeeId}/snapshot")]
-	[ProducesResponseType<GetAtendeeSnapshotResponse>(200)]
-	public async Task<IActionResult> GetAtendeeSnapshot([FromRoute] int attendeeId, [FromQuery] int conferenceId)
+	[ProducesResponseType<GetAttendeeSnapshotResponse>(200)]
+	public async Task<IActionResult> GetAttendeeSnapshot([FromRoute] int attendeeId, [FromQuery] int conferenceId)
 	{
-		return (await mediator.Send(new GetAtendeeSnapshotQuery(conferenceId, attendeeId))).ToActionResult();
+		return (await mediator.Send(new GetAttendeeSnapshotQuery(conferenceId, attendeeId))).ToActionResult();
 	}
 }
