@@ -16,8 +16,6 @@ internal class GetAffiliationsQueryHandler(IAuthenticationService authentication
 	public async Task<IQueryResult<GetAffiliationsResponse>> Handle(GetAffiliationsQuery request,CancellationToken cancellationToken)
 	{
 		var user = await authenticationService.GetCurrentUser();
-		if (user is null || user.IsProfileSetUp is false)
-			return QueryResult.Failure<GetAffiliationsResponse>(ErrorResult.AuthorizationError);
 
 		var affiliations = await affiliationRepository.GetAllAsync(x => x.UserId == user.Id, cancellationToken);
 

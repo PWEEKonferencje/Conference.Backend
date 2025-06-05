@@ -1,7 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Authentication;
 using System.Security.Claims;
 using System.Text;
 using Application.Common.Configuration;
+using Application.Common.Exceptions;
 using Application.Common.Services;
 using Domain.Entities;
 using Domain.Repositories;
@@ -54,21 +56,23 @@ public class AuthenticationService(SignInManager<Identity> signInManager, UserMa
 		return result.Succeeded ? user : null;
 	}
 
-	public async Task<Identity?> GetCurrentIdentity()
+	public async Task<Identity> GetCurrentIdentity()
 	{
 		var user = userContextService.User;
 		if (user is null)
-			return null;
-		return await userManager.GetUserAsync(userContextService.User!);
+			throw new AuthenticationException("User not found");
+		return await userManager.GetUserAsync(userContextService.User!) ?? throw new AuthenticationException("User not found");
 	}
 
-	public async Task<User?> GetCurrentUser()
+	public async Task<User> GetCurrentUser()
 	{
 		var identityId = userContextService.GetUserId();
 		if (identityId is null)
-			return null;
+			throw new AuthenticationException();
 		var identity = await identityRepository.GetWithUserAsync(x => x.Id == identityId);
-		return identity?.UserProfile;
+		if (identity?.UserProfile is null || !identity.UserProfile.IsProfileSetUp)
+			throw new ProfileNotSetUpException();
+		return identity.UserProfile;
 	}
 
 	public async Task<string> GenerateJwtToken(Identity user)

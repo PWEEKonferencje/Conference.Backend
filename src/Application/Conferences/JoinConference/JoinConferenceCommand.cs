@@ -21,14 +21,6 @@ internal class JoinConferenceCommandHandler (IAuthenticationService authenticati
     public async Task<ICommandResult<JoinConferenceResponse>> Handle(JoinConferenceCommand request, CancellationToken cancellationToken)
     {
         var userAccount = await authenticationService.GetCurrentUser();
-        if (userAccount is null)
-        {
-            return CommandResult.Failure<JoinConferenceResponse>(new ErrorResult
-            {
-                ErrorCode = ValidationError.AuthorizationFailed,
-                StatusCode = HttpStatusCode.Unauthorized,
-            });
-        }
 
         var conference = await conferenceRepository.GetByIdAsync(request.ConferenceId, cancellationToken);
         if (conference is null)

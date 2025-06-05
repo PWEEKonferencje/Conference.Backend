@@ -16,8 +16,6 @@ internal class CreateAffiliationCommandHandler(IAuthenticationService authentica
 	public async Task<ICommandResult<CreateAffiliationResponse>> Handle(CreateAffiliationCommand request, CancellationToken cancellationToken)
 	{
 		var user = await authenticationService.GetCurrentUser();
-		if (user is null || user.IsProfileSetUp is false)
-			return CommandResult.Failure<CreateAffiliationResponse>(ErrorResult.AuthorizationError);
 		
 		var affiliation = mapper.Map<Affiliation>(request.Affiliation);
 

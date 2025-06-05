@@ -30,8 +30,6 @@ internal class CreateConferenceCommandHandler(IAuthenticationService authenticat
 	public async Task<ICommandResult<CreateConferenceResponse>> Handle(CreateConferenceCommand request, CancellationToken cancellationToken)
 	{
 		var user = await authenticationService.GetCurrentUser();
-		if (user is null || user.IsProfileSetUp is false)
-			return CommandResult.Failure<CreateConferenceResponse>(ErrorResult.AuthorizationError);
 		var affiliation = await affiliationRepository.GetFirstAsync(x => x.Id == request.UserAffiliationId, cancellationToken);
 		
 		if (affiliation is null)
