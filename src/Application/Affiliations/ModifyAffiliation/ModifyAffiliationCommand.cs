@@ -18,8 +18,6 @@ internal class ModifyAffiliationCommandHandler(IAuthenticationService authentica
 	public async Task<ICommandResult<ModifyAffiliationResponse>> Handle(ModifyAffiliationCommand request, CancellationToken cancellationToken)
 	{
 		var user = await authenticationService.GetCurrentUser();
-		if (user is null || user.IsProfileSetUp is false)
-			return CommandResult.Failure<ModifyAffiliationResponse>(ErrorResult.AuthorizationError);
 		
         var affiliation = await affiliationRepository.GetByIdAsync(request.affiliation.Id, cancellationToken);
 

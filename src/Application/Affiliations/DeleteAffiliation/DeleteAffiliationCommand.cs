@@ -17,8 +17,6 @@ internal class DeleteAffiliationCommandHandler(IAuthenticationService authentica
     public async Task<ICommandResult<DeleteAffiliationResponse>> Handle(DeleteAffiliationCommand request, CancellationToken cancellationToken)
     {
         var user = await authenticationService.GetCurrentUser();
-        if (user is null || user.IsProfileSetUp is false)
-            return CommandResult.Failure<DeleteAffiliationResponse>(ErrorResult.AuthorizationError);
 
         var affiliation = await affiliationRepository.GetByIdAsync(request.Id, cancellationToken);
 

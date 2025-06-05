@@ -20,7 +20,7 @@ internal class GetInvitationDetailsQueryHandler(IInvitationRepository invitation
 			return QueryResult.Failure<GetInvitationDetailsResponse>(new ErrorResult
 			{
 				StatusCode = HttpStatusCode.NotFound,
-				ErrorCode = "InvitationNotFound",
+				ErrorCode = "Invitation Not Found",
 				ErrorDescription = "Invitation was not found."
 			});
 		}

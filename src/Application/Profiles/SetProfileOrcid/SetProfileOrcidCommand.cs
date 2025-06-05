@@ -15,8 +15,6 @@ internal class SetProfileOrcidCommandHandler(IAuthenticationService authenticati
 	public async Task<ICommandResult<SetProfileOrcidResponse>> Handle(SetProfileOrcidCommand request, CancellationToken cancellationToken)
 	{
 		var account = await authenticationService.GetCurrentIdentity();
-		if (account is null)
-			return CommandResult.Failure<SetProfileOrcidResponse>(ErrorResult.AuthorizationError);
 
 		var profile = await profileRepository.GetFirstAsync(x => x.Id == account.UserProfileId, cancellationToken);
 		if (profile?.OrcidId is not null)

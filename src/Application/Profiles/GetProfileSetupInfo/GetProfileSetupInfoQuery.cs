@@ -1,4 +1,5 @@
 using Application.Common.Services;
+using Domain.Repositories;
 using Domain.Shared;
 using MediatR;
 
@@ -7,7 +8,7 @@ namespace Application.Profiles.GetProfileSetupInfo;
 public record GetProfileSetupInfoQuery() : IRequest<IQueryResult<GetProfileSetupInfoResponse>>;
 
 internal class GetProfileSetupInfoQueryHandler(
-    IAuthenticationService authenticationService
+    IAuthenticationService authenticationService, IProfileRepository profileRepository
 ) : IRequestHandler<GetProfileSetupInfoQuery, IQueryResult<GetProfileSetupInfoResponse>>
 {
     public async Task<IQueryResult<GetProfileSetupInfoResponse>> Handle(
@@ -17,9 +18,6 @@ internal class GetProfileSetupInfoQueryHandler(
         var account = await authenticationService.GetCurrentIdentity();
         
         var user = await authenticationService.GetCurrentUser();
-        
-        if (user is null || account is null )
-            return QueryResult.Failure<GetProfileSetupInfoResponse>(ErrorResult.AuthorizationError);
 
         var response = new GetProfileSetupInfoResponse
         {

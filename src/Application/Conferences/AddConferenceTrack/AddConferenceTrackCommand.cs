@@ -23,9 +23,6 @@ internal class AddConferenceTrackCommandHandler(IAuthenticationService authentic
     public async Task<ICommandResult<AddConferenceTrackResponse>> Handle(AddConferenceTrackCommand request, CancellationToken cancellationToken)
     {
         var user = await authenticationService.GetCurrentUser();
-        if (user is null || user.IsProfileSetUp is false)
-            return CommandResult.Failure<AddConferenceTrackResponse>(ErrorResult.AuthorizationError);
-        
         var conference = await conferenceRepository.GetByIdAsync(request.ConferenceId, cancellationToken);
         if (conference is null)
             return CommandResult.Failure<AddConferenceTrackResponse>(
