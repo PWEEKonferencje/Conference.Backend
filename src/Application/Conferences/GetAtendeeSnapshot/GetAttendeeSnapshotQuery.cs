@@ -11,7 +11,7 @@ namespace Application.Conferences.GetAttendeeSnapshot;
 
 public record GetAttendeeSnapshotQuery(int ConferenceId, int AttendeeId) : IRequest<IQueryResult<GetAttendeeSnapshotResponse>>;
 
-internal class GetAttendeeSnapshotQueryHandler(IAuthenticationService authenticationService, IAttendeeRepository attendeeRepository, IMapper mapper)
+internal class GetAttendeeSnapshotQueryHandler(IAttendeeRepository attendeeRepository, IMapper mapper)
 	: IRequestHandler<GetAttendeeSnapshotQuery, IQueryResult<GetAttendeeSnapshotResponse>>
 {
 	public async Task<IQueryResult<GetAttendeeSnapshotResponse>> Handle(GetAttendeeSnapshotQuery request,CancellationToken cancellationToken)
