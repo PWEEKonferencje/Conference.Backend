@@ -6,6 +6,8 @@ using Application.Affiliations.CreateAffiliation;
 using Application.Affiliations.ModifyAffiliation;
 using Application.Affiliations.DeleteAffiliation;
 using Application.Profiles.GetProfileSetupInfo;
+using Application.Profiles.GetProfileDetails;
+
 using Domain.Models.Affiliations;
 using Domain.Entities;
 using MediatR;
@@ -23,6 +25,13 @@ public class ProfileController (IMediator mediator): ControllerBase
     public async Task<IActionResult> CreateProfile([FromBody] CreateProfileCommand profileRequest)
     {
         return (await mediator.Send(profileRequest)).ToActionResult(201);
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(GetProfileDetailsResponse), 200)]
+    public async Task<IActionResult> GetProfileDetails(int id)
+    {
+        return (await mediator.Send(new GetProfileDetailsQuery(id))).ToActionResult();
     }
     
     [HttpGet("setupinfo")]
