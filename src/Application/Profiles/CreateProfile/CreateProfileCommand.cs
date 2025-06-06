@@ -15,6 +15,10 @@ public record CreateProfileCommand : IRequest<ICommandResult<CreateProfileRespon
     public string Name { get; set; } = default!;
     public string Surname { get; set; } = default!;
     public string Degree { get; set; } = default!;
+    public string Email { get; set; } = default!;
+    public string Phone { get; set; } = default!;
+    public string ResearchInterest { get; set; } = default!;
+    public string Country { get; set; } = default!;
     public List<CreateAffiliationModel>? Affiliations { get; set; }
 }
 
