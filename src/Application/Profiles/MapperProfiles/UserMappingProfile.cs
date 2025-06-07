@@ -1,5 +1,6 @@
 using Application.Affiliations.CreateAffiliation;
 using Application.Profiles.CreateProfile;
+using Application.Profiles.GetProfileDetails;
 using AutoMapper;
 using Domain.Entities;
 
@@ -17,5 +18,6 @@ public class UserMappingProfile : Profile
                 x => 
                     x.MapFrom(r => true));
         CreateMap<CreateAffiliationModel, Affiliation>();
+        CreateMap<User, GetProfileDetailsResponse>();
     }
 }
