@@ -11,4 +11,5 @@ public interface IAuthenticationService
 	Task<User> GetCurrentUser();
 	Task<string> GenerateJwtToken(Identity user);
 	Task<Identity?> ExternalLoginOrRegisterAsync();
+	Task<Attendee> GetCurrentAttendee(int conferenceId);
 }
