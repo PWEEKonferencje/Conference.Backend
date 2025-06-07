@@ -35,8 +35,8 @@ internal class CreateInvitationCommandHandler(IAuthenticationService authenticat
 				ErrorCode = "ConferenceNotFound",
 				ErrorDescription = "Conference not found"
 			});
-		
-		var isOrganizer = await attendeeRepository.UserHasRoleAsync(user!.Id, request.ConferenceId, AttendeeRoleEnum.Organizer);
+		var attendee = await authenticationService.GetCurrentAttendee(request.ConferenceId);
+		var isOrganizer = await attendeeRepository.UserHasRoleAsync(request.ConferenceId, attendee.Id, AttendeeRoleEnum.Organizer);
 		if (!isOrganizer)
 		{
 			return CommandResult.Failure<CreateInvitationResponse>(new ErrorResult
