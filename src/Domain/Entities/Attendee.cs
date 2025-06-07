@@ -6,7 +6,7 @@ public class Attendee
 {
 	public int Id { get; set; }
 
-	public virtual List<AttendeeRole> Roles { get; set; } = default!;
+	public virtual List<AttendeeRole> Roles { get; set; } = [];
 
 	public int ConferenceId { get; set; }
 	public Conference Conference { get; set; } = default!;

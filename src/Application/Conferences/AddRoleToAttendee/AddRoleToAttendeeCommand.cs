@@ -20,15 +20,9 @@ internal class AddRoleToAttendeeCommandHandler(IAuthenticationService authentica
     public async Task<ICommandResult<AddRoleToAttendeeResponse>> Handle(AddRoleToAttendeeCommand request, CancellationToken cancellationToken)
     {
 
-        var user = await authenticationService.GetCurrentUser();
-        var conference = await conferenceRepository.GetByIdAsync(request.ConferenceId, cancellationToken);
-        if (conference is null)
-            return CommandResult.Failure<AddRoleToAttendeeResponse>(
-                ErrorResult.DomainError([new Error("Conference not found.", nameof(request.ConferenceId))]));
+	    var currentAttendee = await authenticationService.GetCurrentAttendee(request.ConferenceId);
 
-        var attendee = await authenticationService.GetCurrentAttendee(request.ConferenceId);
-
-		var isOrganizer = await attendeeRepository.UserHasRoleAsync(request.ConferenceId, attendee.Id, AttendeeRoleEnum.Organizer);
+		var isOrganizer = await attendeeRepository.UserHasRoleAsync(request.ConferenceId, currentAttendee.Id, AttendeeRoleEnum.Organizer);
 		if (!isOrganizer)
 		{
 			return CommandResult.Failure<AddRoleToAttendeeResponse>(new ErrorResult
@@ -39,7 +33,7 @@ internal class AddRoleToAttendeeCommandHandler(IAuthenticationService authentica
 			});
 		}
         
-        attendee = await attendeeRepository.GetWithRolesAsync(a => a.Id == request.AttendeeId && a.ConferenceId == request.ConferenceId);
+        var attendee = await attendeeRepository.GetFirstAsync(a => a.Id == request.AttendeeId && a.ConferenceId == request.ConferenceId, cancellationToken);
         if (attendee is null)
             return CommandResult.Failure<AddRoleToAttendeeResponse>(
                 ErrorResult.DomainError([new Error("Attendee not found.", nameof(request.AttendeeId))]));
@@ -47,8 +41,7 @@ internal class AddRoleToAttendeeCommandHandler(IAuthenticationService authentica
         if (attendee.Roles.Any(r => r.RoleEnum == request.Role))
             return CommandResult.Failure<AddRoleToAttendeeResponse>(new ErrorResult
             {
-                ErrorCode = "AttendeeAlreadyHasRole",
-                StatusCode = HttpStatusCode.BadRequest,
+                ErrorCode = "AttendeeAlreadyHasRole"
             });
        
         attendee.Roles.Add(new AttendeeRole { RoleEnum = request.Role });
