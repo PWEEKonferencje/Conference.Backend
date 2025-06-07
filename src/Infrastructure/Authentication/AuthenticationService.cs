@@ -16,7 +16,7 @@ namespace Infrastructure.Authentication;
 
 public class AuthenticationService(SignInManager<Identity> signInManager, UserManager<Identity> userManager, 
 	AuthenticationConfiguration authenticationConfiguration, IUserContextService userContextService, 
-	IIdentityRepository identityRepository) 
+	IIdentityRepository identityRepository, IAttendeeRepository attendeeRepository) 
 	: IAuthenticationService
 {
 	public Task<AuthenticationProperties> ConfigureExternalLoginProperties(string provider, string redirectUrl)
@@ -66,13 +66,28 @@ public class AuthenticationService(SignInManager<Identity> signInManager, UserMa
 
 	public async Task<User> GetCurrentUser()
 	{
-		var identityId = userContextService.GetUserId();
+		var identityId = userContextService.GetIdentityId();
 		if (identityId is null)
 			throw new AuthenticationException();
 		var identity = await identityRepository.GetWithUserAsync(x => x.Id == identityId);
 		if (identity?.UserProfile is null || !identity.UserProfile.IsProfileSetUp)
 			throw new ProfileNotSetUpException();
 		return identity.UserProfile;
+	}
+
+	public async Task<Attendee> GetCurrentAttendee(int conferenceId)
+	{
+		var attendeeIdHeader = userContextService.GetAttendeeId();
+		if (attendeeIdHeader is null)
+			throw new AuthenticationException();
+		var user = await GetCurrentUser();
+		var attendee = await attendeeRepository.GetFirstAsync(x => 
+			x.ConferenceId == conferenceId 
+			&& x.UserId == user.Id 
+			&& x.Id == attendeeIdHeader);
+		if (attendee is null)
+			throw new AuthenticationException();
+		return attendee;
 	}
 
 	public async Task<string> GenerateJwtToken(Identity user)
