@@ -29,4 +29,10 @@ public class AttendeeRepository(ConferenceDbContext dbContext) : Repository<Atte
 			.Include(x => x.UserSnapshot)
 			.FirstOrDefaultAsync(predicate);
 	}
+	public async Task<Attendee?> GetWithRolesAsync(Expression<Func<Attendee, bool>> predicate)
+	{
+		return await dbContext.Attendees
+			.Include(x => x.Roles)
+			.FirstOrDefaultAsync(predicate);
+	}
 }
