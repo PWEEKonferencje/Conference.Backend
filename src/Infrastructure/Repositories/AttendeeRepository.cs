@@ -36,4 +36,10 @@ public class AttendeeRepository(ConferenceDbContext dbContext) : Repository<Atte
 			x.Id == attendeeId 
 		    && x.Roles.Any(r => r.RoleEnum == role));
 	}
+	public async Task<Attendee?> GetWithRolesAsync(Expression<Func<Attendee, bool>> predicate)
+	{
+		return await dbContext.Attendees
+			.Include(x => x.Roles)
+			.FirstOrDefaultAsync(predicate);
+	}
 }

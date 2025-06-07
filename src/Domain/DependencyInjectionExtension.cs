@@ -13,6 +13,8 @@ public static class DependencyInjectionExtension
 	{
 		// Add domain services here
 		services.AddScoped<IPaperService, PaperService>();
+		services.AddScoped<IRolesService, RolesService>();
 		return services;
 	}
+	
 }
