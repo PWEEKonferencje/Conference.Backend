@@ -15,6 +15,14 @@ public class AttendeeRepository(ConferenceDbContext dbContext) : Repository<Atte
 			.Where(a => a.UserId == userId && a.ConferenceId == conferenceId)
 			.AnyAsync(a => a.Roles.Any(r => r.RoleEnum == role));
 	}
+
+	public async Task<bool> AttendeeHasRoleAsync(int attendeeId, int conferenceId, AttendeeRoleEnum role)
+	{
+		return await dbContext.Attendees
+			.Where(a => a.Id == attendeeId && a.ConferenceId == conferenceId)
+			.AnyAsync(a => a.Roles.Any(r => r.RoleEnum == role));
+	}
+	
 	public async Task<Attendee?> GetWithUserSnapshotAsync(Expression<Func<Attendee, bool>> predicate)
 	{
 		return await dbContext.Attendees
