@@ -9,6 +9,6 @@ public class AttendeeConfiguration : IEntityTypeConfiguration<Attendee>
 	public void Configure(EntityTypeBuilder<Attendee> builder)
 	{
 		builder.Property(x => x.CreatedAt)
-		   .HasColumnType("timestamp without time zone");
+		   .HasColumnType("timestamp with time zone");
 	}
 }

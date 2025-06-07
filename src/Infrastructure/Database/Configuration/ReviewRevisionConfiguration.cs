@@ -11,7 +11,7 @@ public class ReviewRevisionConfiguration : IEntityTypeConfiguration<ReviewRevisi
 		builder.HasKey(x => x.Id);
 		builder.Property(x => x.PreviousContent).HasMaxLength(1000);
 		builder.Property(x => x.CurrentContent).HasMaxLength(1000);
-		builder.Property(x => x.Timestamp).HasColumnType("datetime without time zone");
+		builder.Property(x => x.Timestamp).HasColumnType("timestamp with time zone");
 		builder.HasOne(x => x.Review).WithMany(x => x.Revisions);
 	}
 }

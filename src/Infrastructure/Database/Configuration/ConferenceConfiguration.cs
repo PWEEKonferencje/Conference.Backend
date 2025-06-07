@@ -17,16 +17,16 @@ public class ConferenceConfiguration : IEntityTypeConfiguration<Conference>
 			.HasMaxLength(1000);
 		
 		builder.Property(x => x.StartDate)
-			.HasColumnType("timestamp without time zone");
+			.HasColumnType("timestamp with time zone");
 		
 		builder.Property(x => x.EndDate)
-			.HasColumnType("timestamp without time zone");
+			.HasColumnType("timestamp with time zone");
 		
 		builder.Property(x => x.ArticlesDeadline)
-			.HasColumnType("timestamp without time zone");
+			.HasColumnType("timestamp with time zone");
 		
 		builder.Property(x => x.RegistrationDeadline)
-			.HasColumnType("timestamp without time zone");
+			.HasColumnType("timestamp with time zone");
 
 		builder.OwnsOne(x => x.Address);
 	}

@@ -19,5 +19,6 @@ public class PaperConfiguration : IEntityTypeConfiguration<Paper>
 
 		builder.Property(x => x.Abstract).HasMaxLength(300);
 		builder.Property(x => x.Title).HasMaxLength(200);
+		builder.Property(x => x.Authors).HasMaxLength(200);
 	}
 }

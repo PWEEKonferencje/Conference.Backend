@@ -10,6 +10,6 @@ public class ReviewStatusRevisionConfiguration : IEntityTypeConfiguration<Review
 	{
 		builder.HasKey(x => x.Id);
 		builder.HasOne(x => x.Review).WithMany(x => x.StatusRevisions);
-		builder.Property(x => x.Timestamp).HasColumnType("datetime without time zone");
+		builder.Property(x => x.Timestamp).HasColumnType("timestamp with time zone");
 	}
 }

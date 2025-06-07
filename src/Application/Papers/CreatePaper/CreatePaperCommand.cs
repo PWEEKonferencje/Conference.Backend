@@ -3,7 +3,7 @@ using Domain.Services.Abstractions;
 using Domain.Shared;
 using MediatR;
 
-namespace Application.Papers;
+namespace Application.Papers.CreatePaper;
 
 public record CreatePaperCommand(int ConferenceId, string Title, string? Abstract, string? Authors, List<string>? Keywords) : IRequest<ICommandResult<CreatePaperResponse>>;
 

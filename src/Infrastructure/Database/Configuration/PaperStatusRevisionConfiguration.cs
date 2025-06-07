@@ -9,7 +9,7 @@ public class PaperStatusRevisionConfiguration : IEntityTypeConfiguration<PaperSt
 	public void Configure(EntityTypeBuilder<PaperStatusRevision> builder)
 	{
 		builder.HasKey(x => x.Id);
-		builder.Property(x => x.Timestamp).HasColumnType("datetime without time zone");
+		builder.Property(x => x.Timestamp).HasColumnType("timestamp with time zone");
 		builder.HasOne(x => x.Paper).WithMany(x => x.StatusRevision);
 	}
 }
