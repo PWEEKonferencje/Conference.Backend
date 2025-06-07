@@ -19,5 +19,18 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
 		builder.Property(x => x.Degree)
 			.HasMaxLength(40);
+
+		builder.Property(x => x.Email)
+			.HasMaxLength(50);
+
+		builder.Property(x => x.Phone)
+			.HasMaxLength(20);
+
+		builder.Property(x => x.ResearchInterest)
+			.HasMaxLength(200);
+
+		builder.Property(x => x.Country)
+			.HasMaxLength(50);
+			
 	}
 }
