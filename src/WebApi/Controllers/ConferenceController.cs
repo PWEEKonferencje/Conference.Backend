@@ -4,6 +4,7 @@ using Application.Conferences.CreateConference;
 using Application.Invitations.CreateInvitation;
 using Application.Invitations.GetInvitationDetails;
 using Application.Conferences.GetAttendeeSnapshot;
+using Application.Common.Consts;
 using Domain.Enums;
 using Domain.Shared;
 using MediatR;
@@ -40,7 +41,7 @@ public class ConferenceController(IMediator mediator) : ControllerBase
 	[HttpPost("{conferenceId}/createInvitation")]
 	[ProducesResponseType<CreateInvitationResponse>(200)]
 	[ProducesResponseType<ErrorResult>(403)]
-	public async Task<IActionResult> CreateInvitation([FromRoute] int conferenceId, [FromQuery] InvitationType invitationType)
+	public async Task<IActionResult> CreateInvitation([FromRoute] int conferenceId, [FromQuery] InvitationType invitationType,[FromHeader(Name = Headers.AttendeeId)] string attendeeId)
 	{
 		return (await mediator.Send(new CreateInvitationCommand(conferenceId, invitationType))).ToActionResult();
 	}
