@@ -21,4 +21,11 @@ public class AttendeeRepository(ConferenceDbContext dbContext) : Repository<Atte
 			.Include(x => x.UserSnapshot)
 			.FirstOrDefaultAsync(predicate);
 	}
+
+	public Task<bool> AttendeeHasRoleAsync(int attendeeId, AttendeeRoleEnum role)
+	{
+		return dbContext.Attendees.AnyAsync(x => 
+			x.Id == attendeeId 
+		    && x.Roles.Any(r => r.RoleEnum == role));
+	}
 }

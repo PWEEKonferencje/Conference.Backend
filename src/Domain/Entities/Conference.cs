@@ -16,6 +16,9 @@ public class Conference
 	public Address Address { get; set; } = default!;
 
 	public virtual List<Attendee> Attendees { get; set; } = [];
-
 	public virtual List<Track> Tracks { get; set; } = [];
+
+	public virtual List<Paper> Papers { get; set; } = [];
+	
+	public bool IsArticlesDeadlinePassed => DateTime.UtcNow > ArticlesDeadline;
 }

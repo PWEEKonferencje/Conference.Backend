@@ -8,5 +8,6 @@ public class Track
     
     public int ConferenceId { get; set; }
     public Conference Conference { get; set; } = default!;
-    
+
+    public virtual List<Paper> Papers { get; set; } = [];
 }

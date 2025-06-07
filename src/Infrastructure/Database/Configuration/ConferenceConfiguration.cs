@@ -29,23 +29,5 @@ public class ConferenceConfiguration : IEntityTypeConfiguration<Conference>
 			.HasColumnType("timestamp without time zone");
 
 		builder.OwnsOne(x => x.Address);
-
-		builder.Property(x => x.Address.AddressLine1)
-			.HasMaxLength(200);
-
-		builder.Property(x => x.Address.AddressLine2)
-			.HasMaxLength(200);
-
-		builder.Property(x => x.Address.PlaceName)
-			.HasMaxLength(200);
-
-		builder.Property(x => x.Address.City)
-			.HasMaxLength(100);
-
-		builder.Property(x => x.Address.ZipCode)
-			.HasMaxLength(15);
-
-		builder.Property(x => x.Address.Country)
-			.HasMaxLength(150);
 	}
 }

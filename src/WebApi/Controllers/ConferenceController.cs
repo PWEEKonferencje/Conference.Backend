@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using Application.Common.Consts;
 using Application.Conferences.AddConferenceTrack;
 using Application.Conferences.JoinConference;
 using Application.Conferences.CreateConference;
@@ -32,7 +34,7 @@ public class ConferenceController(IMediator mediator) : ControllerBase
 	
 	[HttpPost("track/add")]
 	[ProducesResponseType<AddConferenceTrackResponse>(200)]
-	public async Task<IActionResult> AddConferenceTrack([FromBody] AddConferenceTrackCommand command)
+	public async Task<IActionResult> AddConferenceTrack([FromHeader(Name = Headers.AttendeeId), Required] string attendeeId, [FromBody] AddConferenceTrackCommand command)
 	{
 		return (await mediator.Send(command)).ToActionResult();
 	}
