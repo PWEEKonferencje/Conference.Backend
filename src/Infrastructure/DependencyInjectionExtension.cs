@@ -1,7 +1,6 @@
 using System.Text;
 using Application.Common.Configuration;
 using Application.Common.Services;
-using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Authentication;
 using Infrastructure.Database;
@@ -92,6 +91,7 @@ public static class DependencyInjectionExtension
         services.AddScoped<IConferenceRepository, ConferenceRepository>();
         services.AddScoped<IAttendeeRepository, AttendeeRepository>();
         services.AddScoped<IInvitationRepository, InvitationRepository>();
+        services.AddScoped<IPaperRepository, PaperRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 		return services;
 	}

@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ConferenceDbContext))]
-    partial class ConferenceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250607171514_AddPaperRelatedEntitiesAndLoadTableCfg")]
+    partial class AddPaperRelatedEntitiesAndLoadTableCfg
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,7 +66,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -113,14 +116,14 @@ namespace Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("ArticlesDeadline")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
@@ -132,10 +135,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("character varying(150)");
 
                     b.Property<DateTime>("RegistrationDeadline")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -302,8 +305,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Authors")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("text");
 
                     b.Property<int>("ConferenceId")
                         .HasColumnType("integer");
@@ -346,7 +348,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -373,7 +375,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -434,7 +436,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -459,7 +461,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 

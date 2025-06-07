@@ -19,6 +19,9 @@ public class Attendee
 	public Guid UserSnapshotId { get; set; }
 	public UserSnapshot UserSnapshot { get; set; } = default!;
 
+	public virtual List<Paper> Papers { get; set; } = [];
+	public virtual List<Review> Reviews { get; set; } = [];
+
 	public static Attendee Create(AttendeeRoleEnum role, User user, Affiliation affiliation)
 	{
 		return new Attendee

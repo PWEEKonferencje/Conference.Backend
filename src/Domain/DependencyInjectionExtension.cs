@@ -1,3 +1,5 @@
+using Domain.Services;
+using Domain.Services.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Domain;
@@ -10,6 +12,7 @@ public static class DependencyInjectionExtension
 	public static IServiceCollection AddDomain(this IServiceCollection services)
 	{
 		// Add domain services here
+		services.AddScoped<IPaperService, PaperService>();
 		return services;
 	}
 }

@@ -8,5 +8,5 @@ public interface IAttendeeRepository : IRepository<Attendee>
 {
 	Task<bool> UserHasRoleAsync(int userId, int conferenceId, AttendeeRoleEnum role);
 	Task<Attendee?> GetWithUserSnapshotAsync(Expression<Func<Attendee, bool>> predicate);
-	Task<Attendee?> GetWithRolesAsync(Expression<Func<Attendee, bool>> predicate);
+	Task<bool> AttendeeHasRoleAsync(int attendeeId, AttendeeRoleEnum role);
 }

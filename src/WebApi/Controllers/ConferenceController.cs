@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Application.Common.Consts;
 using Application.Conferences.AddConferenceTrack;
 using Application.Conferences.JoinConference;
 using Application.Conferences.CreateConference;
