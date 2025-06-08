@@ -92,6 +92,7 @@ public static class DependencyInjectionExtension
         services.AddScoped<IAttendeeRepository, AttendeeRepository>();
         services.AddScoped<IInvitationRepository, InvitationRepository>();
         services.AddScoped<IPaperRepository, PaperRepository>();
+        services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 		return services;
 	}

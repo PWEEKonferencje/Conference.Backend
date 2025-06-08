@@ -12,7 +12,7 @@ namespace Application.Conferences.GetParticipants;
 public record GetParticipantsQuery(int ConferenceId, int Page = 1, int PageSize = 20) : IRequest<IQueryResult<GetParticipantsResponse>>;
 
 internal class GetParticipantsQueryHandler(IAttendeeRepository attendeeRepository, IPaperRepository paperRepository, 
-    IConferenceRepository conferenceRepository, IMapper mapper)
+    IReviewRepository reviewRepository, IConferenceRepository conferenceRepository, IMapper mapper)
     
     : IRequestHandler<GetParticipantsQuery, IQueryResult<GetParticipantsResponse>>
 {
@@ -31,9 +31,11 @@ internal class GetParticipantsQueryHandler(IAttendeeRepository attendeeRepositor
         }
         
         var pagedParticipants = await attendeeRepository.GetPage(
-            page: request.Page,
+            page: request.Page, 
             pageSize: request.PageSize,
-            predicate: attendee => attendee.ConferenceId == request.ConferenceId,
+            predicate: 
+                attendee => attendee.ConferenceId == request.ConferenceId &&
+                attendee.Roles.Any(r => r.RoleEnum == AttendeeRoleEnum.Participant),
             orderBy: attendee => attendee.Id,
             orderAsc: true,
             cancellationToken: cancellationToken
@@ -47,7 +49,10 @@ internal class GetParticipantsQueryHandler(IAttendeeRepository attendeeRepositor
             var userSnapshot = attendee.UserSnapshot;
             
             var papersCount = await paperRepository.CountAsync(
-                p => p.Creator.UserId == attendee.UserId && p.ConferenceId == request.ConferenceId,
+                p => p.CreatorId == attendee.Id,
+                cancellationToken);
+            var reviewsCount = await reviewRepository.CountAsync(
+                r => r.ReviewerId == attendee.Id,
                 cancellationToken);
             
             var affiliation = new AffiliationDto(
@@ -64,6 +69,7 @@ internal class GetParticipantsQueryHandler(IAttendeeRepository attendeeRepositor
                 affiliation,
                 attendee.Roles.Select(r => r.RoleEnum.ToString()).ToList(),
                 papersCount,
+                reviewsCount,
                 attendee.CreatedAt
             ));
         }
