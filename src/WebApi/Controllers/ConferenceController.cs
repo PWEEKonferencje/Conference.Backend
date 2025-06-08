@@ -7,6 +7,7 @@ using Application.Invitations.CreateInvitation;
 using Application.Invitations.GetInvitationDetails;
 using Application.Conferences.GetAttendeeSnapshot;
 using Application.Conferences.AddRoleToAttendee;
+using Application.Conferences.DeleteRoleFromAttendee;
 using Application.Common.Consts;
 using Domain.Enums;
 using Domain.Shared;
@@ -63,10 +64,18 @@ public class ConferenceController(IMediator mediator) : ControllerBase
 		return (await mediator.Send(new GetAttendeeSnapshotQuery(conferenceId, attendeeId))).ToActionResult();
 	}
 
+
 	[HttpPost("role/add")]
 	[ProducesResponseType<AddRoleToAttendeeResponse>(200)]
 	public async Task<IActionResult> AddRoleToAttendee([FromQuery] int conferenceId,[FromQuery] int forAttendeeId, [FromQuery] AttendeeRoleEnum role,[FromHeader(Name = Headers.AttendeeId), Required] string attendeeId)
 	{
 		return (await mediator.Send(new AddRoleToAttendeeCommand(conferenceId, forAttendeeId, role))).ToActionResult();
+  }
+	
+  [HttpDelete("role/delete")]
+	[ProducesResponseType<DeleteRoleFromAttendeeResponse>(200)]
+	public async Task<IActionResult> DeleteRoleFromAttendee([FromQuery] int conferenceId,[FromQuery] int fromAttendeeId, [FromQuery] AttendeeRoleEnum role,[FromHeader(Name = Headers.AttendeeId), Required] string attendeeId)
+	{
+		return (await mediator.Send(new DeleteRoleFromAttendeeCommand(conferenceId, fromAttendeeId, role))).ToActionResult();
 	}
 }
