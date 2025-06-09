@@ -65,15 +65,8 @@ public class AttendeeRepository(ConferenceDbContext dbContext) : Repository<Atte
 	            Degree = a.UserSnapshot?.Degree,
 	            Country = a.User?.Country,
 	            Position = a.UserSnapshot?.Position,
-	            Affiliation = string.IsNullOrWhiteSpace(a.UserSnapshot?.Workplace) &&
-	                          string.IsNullOrWhiteSpace(a.UserSnapshot?.Position)
-	                ? null
-	                : new AffiliationInfoModel
-	                {
-	                    Workplace = a.UserSnapshot!.Workplace,
-	                    Position = a.UserSnapshot!.Position,
-	                    IsAcademic = a.UserSnapshot!.IsPositionAcademic
-	                },
+	            Workplace = a.UserSnapshot?.Workplace,
+	            IsAcademic = a.UserSnapshot?.IsPositionAcademic,
 	            Roles = a.Roles.Select(r => r.RoleEnum.ToString()).ToList(),
 	            PapersCount = dbContext.Papers.Count(p => p.CreatorId == a.Id),
 	            ReviewsCount = dbContext.Reviews.Count(r => r.ReviewerId == a.Id),
