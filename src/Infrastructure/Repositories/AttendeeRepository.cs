@@ -5,7 +5,6 @@ using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Domain.Models;
-using Domain.Models.Affiliations;
 using Domain.Models.Conference;
 
 namespace Infrastructure.Repositories;
@@ -38,6 +37,12 @@ public class AttendeeRepository(ConferenceDbContext dbContext) : Repository<Atte
 		return dbContext.Attendees.AnyAsync(x => 
 			x.Id == attendeeId 
 		    && x.Roles.Any(r => r.RoleEnum == role));
+	}
+	
+	public async Task<bool> IsUserAttendeeOfConference(int userId, int conferenceId, CancellationToken cancellationToken)
+	{
+		return await dbContext.Attendees
+			.AnyAsync(a => a.UserId == userId && a.ConferenceId == conferenceId, cancellationToken);
 	}
 	
 	public async Task<PagedList<AttendeeInfoModel>> GetParticipantInfoModels(
