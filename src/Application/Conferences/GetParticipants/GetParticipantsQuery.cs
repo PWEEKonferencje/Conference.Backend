@@ -11,7 +11,7 @@ namespace Application.Conferences.GetParticipants;
 
 public record GetParticipantsQuery(int ConferenceId, int Page = 1, int PageSize = 20) : IRequest<IQueryResult<GetParticipantsResponse>>;
 
-internal class GetParticipantsQueryHandler(IAttendeeRepository attendeeRepository, IPaperRepository paperRepository, 
+internal class GetParticipantsQueryHandler(IAttendeeRepository attendeeRepository, IPaperRepository paperRepository,
     IReviewRepository reviewRepository, IConferenceRepository conferenceRepository, IMapper mapper)
     
     : IRequestHandler<GetParticipantsQuery, IQueryResult<GetParticipantsResponse>>
@@ -29,17 +29,12 @@ internal class GetParticipantsQueryHandler(IAttendeeRepository attendeeRepositor
                 StatusCode = HttpStatusCode.NotFound,
             });
         }
-        
-        var pagedParticipants = await attendeeRepository.GetPage(
-            page: request.Page, 
+
+        var pagedParticipants = await attendeeRepository.GetParticipantsWithDetails(
+            conferenceId: request.ConferenceId,
+            page: request.Page,
             pageSize: request.PageSize,
-            predicate: 
-                attendee => attendee.ConferenceId == request.ConferenceId &&
-                attendee.Roles.Any(r => r.RoleEnum == AttendeeRoleEnum.Participant),
-            orderBy: attendee => attendee.Id,
-            orderAsc: true,
-            cancellationToken: cancellationToken
-        );
+            cancellationToken: cancellationToken);
 
         var participants = new List<AttendeeDto>();
 
@@ -47,19 +42,24 @@ internal class GetParticipantsQueryHandler(IAttendeeRepository attendeeRepositor
         {
             var user = attendee.User;
             var userSnapshot = attendee.UserSnapshot;
-            
+
+            if (user == null || userSnapshot == null)
+                continue;
+
             var papersCount = await paperRepository.CountAsync(
                 p => p.CreatorId == attendee.Id,
                 cancellationToken);
+
             var reviewsCount = await reviewRepository.CountAsync(
                 r => r.ReviewerId == attendee.Id,
                 cancellationToken);
-            
+
             var affiliation = new AffiliationDto(
                 userSnapshot.Workplace,
                 userSnapshot.Position,
                 userSnapshot.IsPositionAcademic
             );
+
             participants.Add(new AttendeeDto(
                 attendee.Id,
                 userSnapshot.Name,
@@ -75,7 +75,7 @@ internal class GetParticipantsQueryHandler(IAttendeeRepository attendeeRepositor
         }
 
         var response = new GetParticipantsResponse(pagedParticipants.Map(participants));
-        
+
         return QueryResult.Success(response);
     }
 }

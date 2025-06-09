@@ -4,6 +4,7 @@ using Domain.Repositories;
 using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Domain.Models;
 
 namespace Infrastructure.Repositories;
 
@@ -35,5 +36,24 @@ public class AttendeeRepository(ConferenceDbContext dbContext) : Repository<Atte
 		return dbContext.Attendees.AnyAsync(x => 
 			x.Id == attendeeId 
 		    && x.Roles.Any(r => r.RoleEnum == role));
+	}
+	
+	public async Task<PagedList<Attendee>> GetParticipantsWithDetails(
+		int conferenceId, int page, int pageSize, CancellationToken cancellationToken)
+	{
+		var query = dbContext.Attendees
+			.Include(a => a.User)
+			.Include(a => a.UserSnapshot)
+			.Where(a => a.ConferenceId == conferenceId &&
+			            a.Roles.Any(r => r.RoleEnum == AttendeeRoleEnum.Participant))
+			.OrderBy(a => a.Id);
+
+		var total = await query.CountAsync(cancellationToken);
+		var items = await query
+			.Skip((page - 1) * pageSize)
+			.Take(pageSize)
+			.ToListAsync(cancellationToken);
+
+		return new PagedList<Attendee>(items, total, page, pageSize);
 	}
 }
