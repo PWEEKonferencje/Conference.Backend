@@ -3,10 +3,10 @@ using Application.Common.Consts;
 using Application.Conferences.AddConferenceTrack;
 using Application.Conferences.JoinConference;
 using Application.Conferences.CreateConference;
+using Application.Conferences.GetAttendeesInfoList;
 using Application.Invitations.CreateInvitation;
 using Application.Invitations.GetInvitationDetails;
 using Application.Conferences.GetAttendeeSnapshot;
-using Application.Conferences.GetParticipants;
 using Domain.Enums;
 using Domain.Shared;
 using MediatR;
@@ -63,12 +63,12 @@ public class ConferenceController(IMediator mediator) : ControllerBase
 	}
 	
 	[HttpGet("{conferenceId}/participants")]
-	[ProducesResponseType(typeof(GetParticipantsResponse), 200)]
-	public async Task<IActionResult> GetParticipants(
+	[ProducesResponseType(typeof(GetAttendeesInfoListResponse), 200)]
+	public async Task<IActionResult> GetAttendeesInfoList(
 		[FromRoute] int conferenceId,
 		[FromQuery] int page = 1,
 		[FromQuery] int pageSize = 10)
 	{
-		return (await mediator.Send(new GetParticipantsQuery(conferenceId, page, pageSize))).ToActionResult();
+		return (await mediator.Send(new GetAttendeesInfoListQuery(conferenceId, page, pageSize))).ToActionResult();
 	}
 }

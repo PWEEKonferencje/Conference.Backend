@@ -5,6 +5,8 @@ using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Domain.Models;
+using Domain.Models.Affiliations;
+using Domain.Models.Conference;
 
 namespace Infrastructure.Repositories;
 
@@ -38,22 +40,48 @@ public class AttendeeRepository(ConferenceDbContext dbContext) : Repository<Atte
 		    && x.Roles.Any(r => r.RoleEnum == role));
 	}
 	
-	public async Task<PagedList<Attendee>> GetParticipantsWithDetails(
-		int conferenceId, int page, int pageSize, CancellationToken cancellationToken)
+	public async Task<PagedList<AttendeeInfoModel>> GetParticipantInfoModels(
+	    int conferenceId, int page, int pageSize, CancellationToken cancellationToken)
 	{
-		var query = dbContext.Attendees
-			.Include(a => a.User)
-			.Include(a => a.UserSnapshot)
-			.Where(a => a.ConferenceId == conferenceId &&
-			            a.Roles.Any(r => r.RoleEnum == AttendeeRoleEnum.Participant))
-			.OrderBy(a => a.Id);
+	    var sourceQuery = dbContext.Attendees
+	        .Include(a => a.User)
+	        .Include(a => a.UserSnapshot)
+	        .Include(a => a.Roles)
+	        .Where(a => a.ConferenceId == conferenceId)
+	        .OrderBy(a => a.Id);
 
-		var total = await query.CountAsync(cancellationToken);
-		var items = await query
-			.Skip((page - 1) * pageSize)
-			.Take(pageSize)
-			.ToListAsync(cancellationToken);
+	    var total = await sourceQuery.CountAsync(cancellationToken);
 
-		return new PagedList<Attendee>(items, total, page, pageSize);
+	    var attendees = await sourceQuery
+	        .Skip((page - 1) * pageSize)
+	        .Take(pageSize)
+	        .ToListAsync(cancellationToken);
+
+	    var result = attendees.Select(a => {
+	        return new AttendeeInfoModel
+	        {
+	            Id = a.Id,
+	            Name = a.UserSnapshot?.Name,
+	            Degree = a.UserSnapshot?.Degree,
+	            Country = a.User?.Country,
+	            Position = a.UserSnapshot?.Position,
+	            Affiliation = string.IsNullOrWhiteSpace(a.UserSnapshot?.Workplace) &&
+	                          string.IsNullOrWhiteSpace(a.UserSnapshot?.Position)
+	                ? null
+	                : new AffiliationInfoModel
+	                {
+	                    Workplace = a.UserSnapshot!.Workplace,
+	                    Position = a.UserSnapshot!.Position,
+	                    IsAcademic = a.UserSnapshot!.IsPositionAcademic
+	                },
+	            Roles = a.Roles.Select(r => r.RoleEnum.ToString()).ToList(),
+	            PapersCount = dbContext.Papers.Count(p => p.CreatorId == a.Id),
+	            ReviewsCount = dbContext.Reviews.Count(r => r.ReviewerId == a.Id),
+	            RegisteredAt = a.CreatedAt
+	        };
+	    }).ToList();
+
+	    return new PagedList<AttendeeInfoModel>(result, page, pageSize, total);
 	}
+
 }
