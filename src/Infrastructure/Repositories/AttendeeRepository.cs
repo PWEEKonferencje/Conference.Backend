@@ -46,40 +46,42 @@ public class AttendeeRepository(ConferenceDbContext dbContext) : Repository<Atte
 	}
 	
 	public async Task<PagedList<AttendeeInfoModel>> GetParticipantInfoModels(
-	    int conferenceId, int page, int pageSize, CancellationToken cancellationToken)
+		int conferenceId, int page, int pageSize, CancellationToken cancellationToken)
 	{
-	    var sourceQuery = dbContext.Attendees
-	        .Include(a => a.User)
-	        .Include(a => a.UserSnapshot)
-	        .Include(a => a.Roles)
-	        .Where(a => a.ConferenceId == conferenceId)
-	        .OrderBy(a => a.Id);
+		var baseQuery = dbContext.Attendees
+			.Where(a => a.ConferenceId == conferenceId)
+			.OrderBy(a => a.Id);
 
-	    var total = await sourceQuery.CountAsync(cancellationToken);
+		var total = await baseQuery.CountAsync(cancellationToken);
 
-	    var attendees = await sourceQuery
-	        .Skip((page - 1) * pageSize)
-	        .Take(pageSize)
-	        .ToListAsync(cancellationToken);
+		var attendeeIds = await baseQuery
+			.Skip((page - 1) * pageSize)
+			.Take(pageSize)
+			.Select(a => a.Id)
+			.ToListAsync(cancellationToken);
 
-	    var result = attendees.Select(a => {
-	        return new AttendeeInfoModel
-	        {
-	            Id = a.Id,
-	            Name = a.UserSnapshot?.Name,
-	            Degree = a.UserSnapshot?.Degree,
-	            Country = a.User?.Country,
-	            Position = a.UserSnapshot?.Position,
-	            Workplace = a.UserSnapshot?.Workplace,
-	            IsAcademic = a.UserSnapshot?.IsPositionAcademic,
-	            Roles = a.Roles.Select(r => r.RoleEnum.ToString()).ToList(),
-	            PapersCount = dbContext.Papers.Count(p => p.CreatorId == a.Id),
-	            ReviewsCount = dbContext.Reviews.Count(r => r.ReviewerId == a.Id),
-	            RegisteredAt = a.CreatedAt
-	        };
-	    }).ToList();
+		var attendees = await dbContext.Attendees
+			.Where(a => attendeeIds.Contains(a.Id))
+			.Include(a => a.User)
+			.Include(a => a.UserSnapshot)
+			.Include(a => a.Roles)
+			.ToListAsync(cancellationToken);
 
-	    return new PagedList<AttendeeInfoModel>(result, page, pageSize, total);
+		var result = attendees.Select(a => new AttendeeInfoModel
+		{
+			Id = a.Id,
+			Name = a.UserSnapshot?.Name,
+			Degree = a.UserSnapshot?.Degree,
+			Country = a.User?.Country,
+			Position = a.UserSnapshot?.Position,
+			Workplace = a.UserSnapshot?.Workplace,
+			IsAcademic = a.UserSnapshot?.IsPositionAcademic,
+			Roles = a.Roles.Select(r => r.RoleEnum.ToString()).ToList(),
+			PapersCount = dbContext.Papers.Count(p => p.CreatorId == a.Id),
+			ReviewsCount = dbContext.Reviews.Count(r => r.ReviewerId == a.Id),
+			RegisteredAt = a.CreatedAt
+		}).ToList();
+
+		return new PagedList<AttendeeInfoModel>(result, page, pageSize, total);
 	}
-
 }
