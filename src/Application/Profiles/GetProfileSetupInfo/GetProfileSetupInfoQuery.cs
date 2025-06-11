@@ -16,14 +16,14 @@ internal class GetProfileSetupInfoQueryHandler(
         CancellationToken cancellationToken)
     {
         var account = await authenticationService.GetCurrentIdentity();
-        
-        var user = await authenticationService.GetCurrentUser();
+
+        var user = await profileRepository.GetByIdAsync(account.UserProfileId!, cancellationToken);
 
         var response = new GetProfileSetupInfoResponse
         {
             IsAccountSetupFinished = account.IsAccountSetupFinished(),
             IsEmailProvided = !string.IsNullOrEmpty(account.Email),
-            IsOrcidProvided = !string.IsNullOrEmpty(user.OrcidId)
+            IsOrcidProvided = !string.IsNullOrEmpty(user?.OrcidId)
         };
 
         return QueryResult.Success(response);
